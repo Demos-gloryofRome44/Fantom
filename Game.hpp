@@ -28,6 +28,11 @@ public:
     bool movingLeft;
     bool movingRight;
 
+    bool right = false;
+    bool left = false;
+
+    sf::Clock gameClock; 
+
     const float speed = 0.1f; // Увеличиваем скорость
 };
 #endif // GAME_H

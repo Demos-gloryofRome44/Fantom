@@ -7,19 +7,28 @@
 
 class Entity {
 public:
-    sf::CircleShape circle;
     sf::Texture texture;
     sf::Sprite sprite;
+    sf::CircleShape circle;
+    std::vector<sf::Texture> textures; // Вектор для хранения 
+    int currentFrame; // Текущий кадр анимации
+    float animationSpeed; // Скорость анимации
+    float elapsedTime;
 
     // Конструктор
-    Entity(const std::string& textureFile, float posX, float posY, float width, float height);
+    Entity(const std::vector<std::string>& textureFiles, float posX, float posY, float width, float height);
 
     sf::FloatRect getBounds() const { return sprite.getGlobalBounds(); }
 
     bool checkCollision(const Map& map);
+    bool right = true;
+    bool left = false;
     
     void move(float x, float y, const Map& map);
     void draw(sf::RenderWindow& window);
+    void update(float deltaTime); // Метод обновления анимации
+
+    void updateSprite(bool turn);
 };
 
 #endif // ENTITY_H
