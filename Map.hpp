@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include "Enemy.hpp"
 
 class Map {
 public:
@@ -20,12 +21,16 @@ public:
     float getTileSize() const {return tileSize; }
     sf::FloatRect getTileBounds(size_t x, size_t y) const; // Получение границ тайла
 
+    void updateEnemies(float deltaTime); // Новый метод для обновления противников
+
 private:
     sf::Texture backgroundTexture; // Текстура для фона
     sf::Sprite backgroundSprite;    // Спрайт для фона
     std::vector<sf::Texture> textures; // Вектор текстур
     std::vector<std::vector<int>> map;  // Двумерный массив для карты
     const float tileSize = 32.f;        // Размер тайла (можно изменить)
+
+    std::vector<Enemy> enemies;
 };
 
 #endif // MAP_HPP

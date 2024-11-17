@@ -64,9 +64,12 @@ void Game::run() {
 
 void Game::processEvents() {
     //window.setKeyboardFocus(true);
-    window.setActive(true); // Установка фокуса на
+    window.setActive(true); // Установка фокуса н
 
+    if (right == false) {
     std::cout << "Можно нажимать клавиши" << std::endl;
+    right = true;
+    }
     sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed)
@@ -94,9 +97,6 @@ void Game::processEvents() {
 
 void Game::update() {
     float deltaTime = gameClock.restart().asSeconds(); // Получаем время с последнего кадра
-
-    bool right = false;
-    bool left = false;
     
     if (movingUp) {
         std::cout << "Moving up" << std::endl; 
@@ -117,5 +117,6 @@ void Game::update() {
         player.move(speed, 0.f, gameMap);
     }
 
-     player.update(deltaTime);
+    gameMap.updateEnemies(deltaTime);
+    player.update(deltaTime);
 }

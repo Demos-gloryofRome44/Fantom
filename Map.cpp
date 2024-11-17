@@ -20,6 +20,8 @@ Map::Map(const std::vector<std::string>& textureFiles, const std::vector<std::ve
     
     // Установка карты
     map = mapData;
+
+    enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", 400.f, 219.f, 50.f, 50.f); 
 }
 
 // Метод для отрисовки карты
@@ -40,8 +42,18 @@ void Map::draw(sf::RenderWindow& window) {
             }
         }
     }
+
+    for (auto& enemy : enemies) {
+        enemy.draw(window);
+    }
 }
 
 sf::FloatRect Map::getTileBounds(size_t x, size_t y) const {
     return sf::FloatRect(x * tileSize, y * tileSize, tileSize, tileSize);
+}
+
+void Map::updateEnemies(float deltaTime) {
+    for (auto& enemy : enemies) {
+        enemy.update(deltaTime, *this); // Передаем карту в метод обновления противника
+    }
 }
