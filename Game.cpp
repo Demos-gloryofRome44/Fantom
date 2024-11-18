@@ -117,6 +117,6 @@ void Game::update() {
         player.move(speed, 0.f, gameMap);
     }
 
-    gameMap.updateEnemies(deltaTime);
+    gameMap.updateEnemies(deltaTime, player);
     player.update(deltaTime);
 }

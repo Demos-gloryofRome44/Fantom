@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Map.hpp"
 
+class Map;
 class Entity {
 public:
     sf::Texture texture;
@@ -29,6 +30,8 @@ public:
     void update(float deltaTime); // Метод обновления анимации
 
     void updateSprite(bool turn);
+
+    sf::Vector2f getPosition() const;
 };
 
 #endif // ENTITY_H

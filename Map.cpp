@@ -21,7 +21,7 @@ Map::Map(const std::vector<std::string>& textureFiles, const std::vector<std::ve
     // Установка карты
     map = mapData;
 
-    enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", 400.f, 219.f, 50.f, 50.f); 
+    enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 400.f, 219.f, 50.f, 50.f); 
 }
 
 // Метод для отрисовки карты
@@ -52,8 +52,8 @@ sf::FloatRect Map::getTileBounds(size_t x, size_t y) const {
     return sf::FloatRect(x * tileSize, y * tileSize, tileSize, tileSize);
 }
 
-void Map::updateEnemies(float deltaTime) {
+void Map::updateEnemies(float deltaTime, Entity &player) {
     for (auto& enemy : enemies) {
-        enemy.update(deltaTime, *this); // Передаем карту в метод обновления противника
+        enemy.update(deltaTime, *this, player); // Передаем карту в метод обновления противника
     }
 }

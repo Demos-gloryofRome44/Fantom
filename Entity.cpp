@@ -87,3 +87,7 @@ void Entity::update(float deltaTime) {
         elapsedTime = 0.f; // Сбрасываем время
     }
 }
+
+sf::Vector2f Entity::getPosition() const {
+    return sprite.getPosition(); 
+}

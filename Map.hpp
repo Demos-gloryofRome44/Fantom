@@ -5,7 +5,10 @@
 #include <iostream>
 #include <vector>
 #include "Enemy.hpp"
+#include "Entity.hpp"
 
+class Entity;
+class Enemy;
 class Map {
 public:
     // Конструктор, который загружает текстуры и устанавливает карту
@@ -21,7 +24,7 @@ public:
     float getTileSize() const {return tileSize; }
     sf::FloatRect getTileBounds(size_t x, size_t y) const; // Получение границ тайла
 
-    void updateEnemies(float deltaTime); // Новый метод для обновления противников
+    void updateEnemies(float deltaTime, Entity &player); // Новый метод для обновления противников
 
 private:
     sf::Texture backgroundTexture; // Текстура для фона
