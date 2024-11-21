@@ -1,12 +1,12 @@
 #include "Map.hpp"
 
-Map::Map(const std::vector<std::string>& textureFiles, const std::vector<std::vector<int>>& mapData) {
-    for (size_t i = 0; i < textureFiles.size(); ++i) {
+Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::vector<std::vector<int>>& mapData) {
+    for (const auto& pair : textureFiles) {
         sf::Texture texture;
-        if (!texture.loadFromFile(textureFiles[i])) {
-            std::cerr << "Ошибка загрузки текстуры из " << textureFiles[i] << std::endl;
+        if (!texture.loadFromFile(pair.second)) { // Используем путь из unordered_map
+            std::cerr << "Ошибка загрузки текстуры из " << pair.second << std::endl;
         }
-        textures.push_back(texture);
+        textures[pair.first] = texture; // Сохраняем текстуру по ключу
     }
     // Загрузка текстуры фона
     if (!backgroundTexture.loadFromFile("assets/labs/Background/Background.png")) {
@@ -31,11 +31,10 @@ void Map::draw(sf::RenderWindow& window) {
             if (tileType == -1) {
                 continue; // Игнорируем фон
             }
-            if (tileType >= 0 && tileType < textures.size()) { // Проверка на допустимый тип тайла
+            if (textures.find(tileType) != textures.end()) { // Проверка на наличие текстуры по индексу
                 sf::Sprite sprite;
-                sprite.setTexture(textures[tileType]);
+                sprite.setTexture(textures[tileType]); // Получаем текстуру по индексу
                 sprite.setPosition(x * tileSize, y * tileSize); 
-                
                 window.draw(sprite); 
             }
         }

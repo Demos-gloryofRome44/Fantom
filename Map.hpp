@@ -12,7 +12,7 @@ class Enemy;
 class Map {
 public:
     // Конструктор, который загружает текстуры и устанавливает карту
-    Map(const std::vector<std::string>& textureFiles, const std::vector<std::vector<int>>& mapData);
+    Map(const std::unordered_map<int, std::string>& textureFiles, const std::vector<std::vector<int>>& mapData);
 
     // Метод для отрисовки карты
     void draw(sf::RenderWindow& window);
@@ -33,7 +33,7 @@ public:
 private:
     sf::Texture backgroundTexture; // Текстура для фона
      sf::Sprite backgroundSprite;   // Спрайт для фона
-    std::vector<sf::Texture> textures; // Вектор текстур
+    std::unordered_map<int, sf::Texture> textures; // Вектор текстур
     std::vector<std::vector<int>> map;  // Двумерный массив для карты
     const float tileSize = 32.f;        // Размер тайла (можно изменить)
 

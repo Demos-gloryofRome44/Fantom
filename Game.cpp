@@ -37,33 +37,45 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                window.getSize().x,
                window.getSize().y),
                movingUp(false), movingDown(false), movingLeft(false), movingRight(false) {
-                maps.emplace_back(
-                    std::vector<std::string>{"assets/labs/tiles/wallLeft.png", "assets/labs/tiles/wallCentr.png", 
-                    "assets/labs/tiles/wallRight.png", "assets/labs/tiles/left.png", 
-                    "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
-                    "assets/labs/tiles/box.png", "assets/labs/tiles/box.png",
-                    "assets/labs/tiles/leftPlat.png", "assets/labs/tiles/plat.png", "assets/labs/tiles/rightPlat.png",
-                    "assets/labs/tiles/krest.png", "assets/labs/tiles/stolb.png", "assets/labs/tiles/stolb1.png",
-                    "assets/labs/Objects/locker.png", "assets/labs/Objects/Box1.png"
-                    }, 
+
+                std::unordered_map<int, std::string> textureFiles = {
+        {0, "assets/labs/tiles/wallLeft.png"},
+        {1, "assets/labs/tiles/wallCentr.png"},
+        {2, "assets/labs/tiles/wallRight.png"},
+        {3, "assets/labs/tiles/left.png"},
+        {4, "assets/labs/tiles/right.png"},
+        {5, "assets/labs/tiles/leftPlat.png"},
+        {6, "assets/labs/tiles/Plat.png"},
+        {7, "assets/labs/tiles/rightPlat.png"},
+        {8, "assets/labs/tiles/box.png"},
+        {9, "assets/labs/tiles/krest.png"},
+        {10, "assets/labs/tiles/block.png"},
+
+        {20, "assets/labs/tiles/stolb.png"},
+        {21, "assets/labs/tiles/stolb1.png"},
+        {22,"assets/labs/Objects/locker.png"},
+        {23,"assets/labs/Objects/Box1.png"},
+        {24,"assets/labs/Objects/Box1.png"},
+        {25,"assets/labs/Objects/Box1.png"}
+    };
+
+
+                maps.emplace_back(textureFiles,
                     std::vector<std::vector<int>>{
                    {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
-                   {3, -1, -1, -1, -1, -1, -1, 13, -1, -1, 13, -1, -1, -1, -1, -1}, 
-                   {3, 15, -1, -1, -1, -1, -1, 12, -1, -1, 12, -1, -1, -1, -1, -1}, 
-                   {3,  6, -1, -1, -1, -1, -1, 11, 11, 11, 11, -1, -1,  8,  9, 10}, 
+                   {3, -1, -1, -1, -1, -1, -1, 21, -1, -1, 21, -1, -1, -1, -1, -1}, 
+                   {3, 23, -1, -1, -1, -1, -1, 20, -1, -1, 20, -1, -1, -1, -1, -1}, 
+                   {3,  6, -1, -1, -1, -1, -1,  9,  9,  9,  9, -1, -1,  5,  6, 7}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, 14, 4}, 
-                   {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, 14, 4},
+                   {3, -1, -1,  8, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, 22, 4}, 
+                   {3, -1,  8,  8, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, 22, 4},
                    {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
                }
                 );
 
-               maps.emplace_back(
-                    std::vector<std::string>{"assets/labs/tiles/wallLeft.png", "assets/labs/tiles/wallCentr.png", "assets/labs/tiles/wallRight.png",
-               "assets/labs/tiles/left.png", "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
-               "assets/labs/tiles/box.png"}, 
+               maps.emplace_back(textureFiles,
                     std::vector<std::vector<int>>{
                    {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
                    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, 
@@ -78,10 +90,7 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                }
                );
 
-               maps.emplace_back(
-                    std::vector<std::string>{"assets/labs/tiles/wallLeft.png", "assets/labs/tiles/wallCentr.png", "assets/labs/tiles/wallRight.png",
-               "assets/labs/tiles/left.png", "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
-               "assets/labs/tiles/box.png"}, 
+               maps.emplace_back(textureFiles,
                     std::vector<std::vector<int>>{
                    {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
                    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
