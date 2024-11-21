@@ -18,12 +18,11 @@ Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFil
         std::cerr << "Ошибка загрузки текстуры атаки из " << attackTextureFile << std::endl;
     }
 
-    sprite.setTexture(texture); // Устанавливаем текстуру
+    sprite.setTexture(texture); 
 
     position = sf::Vector2f(posX, posY); // Инициализируем позицию врага
     sprite.setPosition(position); 
 
-    // Установка начального прямоугольника текстуры (например, первый кадр)
     sprite.setTextureRect(sf::IntRect(50, 60, 35, 70)); 
 }
 
@@ -32,10 +31,9 @@ void Enemy::animate(float deltaTime) {
 
     if (elapsedTime >= animationSpeed) {
         currentFrame = (currentFrame + 1) % 7; 
-        int frameWidth = 95 + 35; // Ширина одного кадра
-        int frameHeight = 70; // Высота одного кадра
+        int frameWidth = 95 + 35; 
+        int frameHeight = 70; 
         
-        // Устанавливаем новый прямоугольник текстуры для текущего кадра
         sprite.setTextureRect(sf::IntRect(30 + currentFrame * frameWidth, 60, 50, frameHeight));
         
         elapsedTime = 0.f; 
@@ -77,7 +75,7 @@ void Enemy::move(float deltaX, float deltaY, const Map& map) {
     // Проверка типа тайла
     int tileType = map.getTileType(newX, newY);
     
-    if (tileType == -1) { // Если тайл с весом 1
+    if (tileType == -1) { 
         position.x += deltaX;
         position.y += deltaY;
         sprite.setPosition(position); // Обновляем позицию спрайта
@@ -87,10 +85,10 @@ void Enemy::move(float deltaX, float deltaY, const Map& map) {
     }
 }
 
-void Enemy::update(float deltaTime, const Map& map, const Entity &player) {
+void Enemy::update(float deltaTime, const Map& map, Entity &player) {
 
     if (canSeePlayer(player, map)) {
-        if (flag){
+        if (true){
         std::cout<<"противник видит игрока, останавливаемся и начинаем стрелять"<<std::endl;
         flag = false;
         }
@@ -129,9 +127,18 @@ void Enemy::update(float deltaTime, const Map& map, const Entity &player) {
         if (tileType != -1) { // Если тайл не проходимый
             bullets.erase(bullets.begin() + i); // Удаляем пулю из вектора
         } else {
-            ++i; // Переходим к следующей пуле только если не удалили текущую
+           if (checkCollisionWithPlayer(bullets[i], player)) {
+                player.die(); 
+                bullets.erase(bullets.begin() + i); // Удаляем пулю из вектора
+            } else {
+                ++i; // Переходим к следующей пуле только если не удалили текущую
+            }
         }
     }
+}
+
+bool Enemy::checkCollisionWithPlayer(const Bullet& bullet, const Entity& player) const {
+    return bullet.getShape().getGlobalBounds().intersects(player.getBounds());
 }
 
 void Enemy::draw(sf::RenderWindow& window) {

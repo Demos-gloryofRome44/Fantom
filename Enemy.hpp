@@ -14,8 +14,12 @@ class Enemy {
 public:
     Enemy(const std::string& textureFile, const std::string& AttackTextureFile, float posX, float posY, float width, float height);
     
-    void update(float deltaTime, const Map& map, const Entity &player);
+    void update(float deltaTime, const Map& map, Entity &player);
     void draw(sf::RenderWindow& window);
+
+    bool checkCollisionWithPlayer(const Bullet& bullet, const Entity& player) const;
+
+    void resetState();
 
 private:
     sf::Sprite sprite; // Спрайт для отображения противника

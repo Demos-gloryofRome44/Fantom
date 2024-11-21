@@ -9,16 +9,15 @@
 class Game {
 public:
     Game();
-    void run();
+    bool run();
     void processEvents();
     void update();
-    
+    void restart();
+
+private:
     sf::RenderWindow window;
     Map gameMap;
     Entity player;
-
-    std::vector<std::string> frames = {"assets/entity/Walking/1.png", "assets/entity/Walking/2.png", "assets/entity/Walking/3.png", 
-    "assets/entity/Walking/4.png"}; 
 
     sf::Texture backgroundTexture; // Текстура для фона
     sf::Sprite backgroundSprite;    // Спрайт для фона
@@ -34,5 +33,11 @@ public:
     sf::Clock gameClock; 
 
     const float speed = 0.1f; // Увеличиваем скорость
+
+    bool isGameOver = false;
+
+    std::vector<Map> maps; // Вектор для хранения разных карт
+    int currentMapIndex; // Индекс текущей карты
+
 };
 #endif // GAME_H

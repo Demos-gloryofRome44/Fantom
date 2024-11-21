@@ -26,6 +26,8 @@ public:
 
     void updateEnemies(float deltaTime, Entity &player); // Новый метод для обновления противников
 
+    void reset();
+
 private:
     sf::Texture backgroundTexture; // Текстура для фона
     sf::Sprite backgroundSprite;    // Спрайт для фона
@@ -34,6 +36,7 @@ private:
     const float tileSize = 32.f;        // Размер тайла (можно изменить)
 
     std::vector<Enemy> enemies;
+    
 };
 
 #endif // MAP_HPP

@@ -1,8 +1,6 @@
 #include "Map.hpp"
 
-// Конструктор, который загружает текстуры и устанавливает карту
 Map::Map(const std::vector<std::string>& textureFiles, const std::vector<std::vector<int>>& mapData) {
-    // Загрузка текстур
     for (size_t i = 0; i < textureFiles.size(); ++i) {
         sf::Texture texture;
         if (!texture.loadFromFile(textureFiles[i])) {
@@ -15,7 +13,7 @@ Map::Map(const std::vector<std::string>& textureFiles, const std::vector<std::ve
         std::cerr << "Ошибка загрузки текстуры фона." << std::endl;
     }
     
-    backgroundSprite.setTexture(backgroundTexture); // Установка текстуры для спрайта
+    backgroundSprite.setTexture(backgroundTexture); 
     backgroundSprite.setPosition(0.f, 0.f);
     
     // Установка карты
@@ -37,8 +35,8 @@ void Map::draw(sf::RenderWindow& window) {
             if (tileType >= 0 && tileType < textures.size()) { // Проверка на допустимый тип тайла
                 sf::Sprite sprite;
                 sprite.setTexture(textures[tileType]);
-                sprite.setPosition(x * tileSize, y * tileSize); // Установка позиции спрайта
-                window.draw(sprite); // Отрисовка спрайта
+                sprite.setPosition(x * tileSize, y * tileSize); 
+                window.draw(sprite); 
             }
         }
     }
@@ -54,6 +52,21 @@ sf::FloatRect Map::getTileBounds(size_t x, size_t y) const {
 
 void Map::updateEnemies(float deltaTime, Entity &player) {
     for (auto& enemy : enemies) {
-        enemy.update(deltaTime, *this, player); // Передаем карту в метод обновления противника
+        enemy.update(deltaTime, *this, player); 
     }
+}
+
+void Map::reset() {
+    map = {
+                   {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4},
+                   {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
+    };
 }

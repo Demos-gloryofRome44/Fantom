@@ -11,9 +11,9 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(1200, 700), "Main Menu");
 
     Menu menu; 
-    menu.show(window); 
-
+    menu.show(window);
     Game game;
     game.run();
+
     return 0;
 }

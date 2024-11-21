@@ -4,6 +4,7 @@
 #include <string>
 #include <filesystem>
 #include <iostream>
+#include "Menu.hpp"
 
 // Функция для загрузки текстур из директории
 std::vector<std::string> loadTexturesFromDirectory(const std::string& directory) {
@@ -34,24 +35,34 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                "assets/labs/tiles/left.png", "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
                "assets/labs/tiles/box.png"},
                {
-                   {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, // Стены по верхнему краю
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, // Открытое пространство с дверью
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, // Блоки и открытое пространство
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, // Открытое пространство и дверь
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, // Стены снизу
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, // Открытое пространство с дверью
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, // Блоки и двери
-                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, // Открытое пространство с дверями
+                   {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4},
                    {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
                }),
-               player(loadTexturesFromDirectory("assets/entity/Walking"), 200.f, 150.f, 
+               player(loadTexturesFromDirectory("assets/entity/Walking"), 
+               loadTexturesFromDirectory("assets/entity/Dying"),
+                200.f, 150.f, 
                window.getSize().x,
                window.getSize().y),
                movingUp(false), movingDown(false), movingLeft(false), movingRight(false) {}
 
-void Game::run() {
+bool Game::run() {
     while (window.isOpen()) {
+        if (isGameOver == true) {
+            Menu menu;
+            int result = menu.restartMenu(window);
+            if (result == 2) { // Если выбрана опция выхода
+                return false;
+            }
+            restart();
+        }
         processEvents();
         update();
 
@@ -60,13 +71,14 @@ void Game::run() {
         player.draw(window);
         window.display();
     }
+    return true;
 }
 
 void Game::processEvents() {
     //window.setKeyboardFocus(true);
-    window.setActive(true); // Установка фокуса н
+    window.setActive(true); 
 
-    if (right == false) {
+    if (!right) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -119,4 +131,25 @@ void Game::update() {
 
     gameMap.updateEnemies(deltaTime, player);
     player.update(deltaTime);
+
+    if (player.end) {
+        isGameOver = true; // Завершаем игру
+    }
+}
+
+void Game::restart() {
+    player.setPosition(200.f, 150.f); // Вернуть игрока на начальную позицию
+
+    player.resetState();
+
+    gameMap.reset();                   // Предполагается, что у вас есть метод для сброса карты
+
+    // Сброс флагов движения
+    movingUp = false;
+    movingDown = false;
+    movingLeft = false;
+    movingRight = false;
+
+    // Сброс состояния окончания игры
+    isGameOver = false;                // Устанавливаем флаг окончания игры в false
 }

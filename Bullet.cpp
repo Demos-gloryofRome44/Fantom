@@ -1,7 +1,7 @@
 #include "Bullet.hpp"
 
 Bullet::Bullet(float x, float y, const sf::Vector2f& playerPosition)
-    : speed(200.f) { // Установите скорость по вашему усмотрению
+    : speed(200.f) { 
     shape.setRadius(3.f);
     shape.setPosition(x, y);
     shape.setFillColor(sf::Color::Red);
@@ -15,7 +15,6 @@ Bullet::Bullet(float x, float y, const sf::Vector2f& playerPosition)
         direction /= distance; // Нормализация
     }
 
-    // Устанавливаем скорость по направлению к игроку
     velocity = direction * speed; // Устанавливаем скорость как нормализованный вектор, умноженный на скорость
 }
 
@@ -24,9 +23,13 @@ void Bullet::update(float deltaTime) {
 }
 
 void Bullet::draw(sf::RenderWindow& window) {
-    window.draw(shape); // Отрисовка пули
+    window.draw(shape); 
 }
 
 sf::Vector2f Bullet::getPosition() const {
-    return shape.getPosition(); // Возвращаем позицию формы пули
+    return shape.getPosition(); 
+}
+
+sf::CircleShape Bullet::getShape() const {
+    return shape; 
 }
