@@ -13,9 +13,6 @@ Map::Map(const std::vector<std::string>& textureFiles, const std::vector<std::ve
         std::cerr << "Ошибка загрузки текстуры фона." << std::endl;
     }
     
-    backgroundSprite.setTexture(backgroundTexture); 
-    backgroundSprite.setPosition(0.f, 0.f);
-    
     // Установка карты
     map = mapData;
 
@@ -24,6 +21,8 @@ Map::Map(const std::vector<std::string>& textureFiles, const std::vector<std::ve
 
 // Метод для отрисовки карты
 void Map::draw(sf::RenderWindow& window) {
+    backgroundSprite.setTexture(backgroundTexture); 
+    backgroundSprite.setPosition(0.f, 0.f);
     window.draw(backgroundSprite);
 
     for (size_t y = 0; y < map.size(); ++y) {
@@ -36,6 +35,7 @@ void Map::draw(sf::RenderWindow& window) {
                 sf::Sprite sprite;
                 sprite.setTexture(textures[tileType]);
                 sprite.setPosition(x * tileSize, y * tileSize); 
+                
                 window.draw(sprite); 
             }
         }
@@ -44,6 +44,21 @@ void Map::draw(sf::RenderWindow& window) {
     for (auto& enemy : enemies) {
         enemy.draw(window);
     }
+}
+
+bool Map::isExitTile(const sf::Vector2f& position) const {
+    for (size_t y = 0; y < map.size(); ++y) {
+        for (size_t x = 0; x < map[y].size(); ++x) {
+            if (map[y][x] == 4) { 
+                sf::FloatRect tileBounds = getTileBounds(x, y);
+                if (tileBounds.contains(position)) {
+                    return true; // Игрок находится на тайле выхода
+                }
+            }
+        }
+    }
+    
+    return false; // Игрок не на тайле выхода
 }
 
 sf::FloatRect Map::getTileBounds(size_t x, size_t y) const {

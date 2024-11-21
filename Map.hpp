@@ -28,15 +28,17 @@ public:
 
     void reset();
 
+    bool isExitTile(const sf::Vector2f& position) const;
+
 private:
     sf::Texture backgroundTexture; // Текстура для фона
-    sf::Sprite backgroundSprite;    // Спрайт для фона
+     sf::Sprite backgroundSprite;   // Спрайт для фона
     std::vector<sf::Texture> textures; // Вектор текстур
     std::vector<std::vector<int>> map;  // Двумерный массив для карты
     const float tileSize = 32.f;        // Размер тайла (можно изменить)
 
     std::vector<Enemy> enemies;
-    
+
 };
 
 #endif // MAP_HPP

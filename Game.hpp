@@ -16,11 +16,10 @@ public:
 
 private:
     sf::RenderWindow window;
-    Map gameMap;
+    //Map gameMap;
     Entity player;
 
-    sf::Texture backgroundTexture; // Текстура для фона
-    sf::Sprite backgroundSprite;    // Спрайт для фона
+        // Спрайт для фона
 
     bool movingUp;// движение игрока в зависимости прожатой кнопки
     bool movingDown;
@@ -37,7 +36,7 @@ private:
     bool isGameOver = false;
 
     std::vector<Map> maps; // Вектор для хранения разных карт
-    int currentMapIndex; // Индекс текущей карты
+    int currentMapIndex = 0; // Индекс текущей карты
 
 };
 #endif // GAME_H

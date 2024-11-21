@@ -31,13 +31,43 @@ std::vector<std::string> loadTexturesFromDirectory(const std::string& directory)
 
 
 Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
-               gameMap({"assets/labs/tiles/wallLeft.png", "assets/labs/tiles/wallCentr.png", "assets/labs/tiles/wallRight.png",
-               "assets/labs/tiles/left.png", "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
-               "assets/labs/tiles/box.png"},
-               {
+               player(loadTexturesFromDirectory("assets/entity/Walking"), 
+               loadTexturesFromDirectory("assets/entity/Dying"),
+                200.f, 150.f, 
+               window.getSize().x,
+               window.getSize().y),
+               movingUp(false), movingDown(false), movingLeft(false), movingRight(false) {
+                maps.emplace_back(
+                    std::vector<std::string>{"assets/labs/tiles/wallLeft.png", "assets/labs/tiles/wallCentr.png", 
+                    "assets/labs/tiles/wallRight.png", "assets/labs/tiles/left.png", 
+                    "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
+                    "assets/labs/tiles/box.png", "assets/labs/tiles/box.png",
+                    "assets/labs/tiles/leftPlat.png", "assets/labs/tiles/plat.png", "assets/labs/tiles/rightPlat.png",
+                    "assets/labs/tiles/krest.png", "assets/labs/tiles/stolb.png", "assets/labs/tiles/stolb1.png",
+                    "assets/labs/Objects/locker.png", "assets/labs/Objects/Box1.png"
+                    }, 
+                    std::vector<std::vector<int>>{
                    {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
+                   {3, -1, -1, -1, -1, -1, -1, 13, -1, -1, 13, -1, -1, -1, -1, -1}, 
+                   {3, 15, -1, -1, -1, -1, -1, 12, -1, -1, 12, -1, -1, -1, -1, -1}, 
+                   {3,  6, -1, -1, -1, -1, -1, 11, 11, 11, 11, -1, -1,  8,  9, 10}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, 14, 4}, 
+                   {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, 14, 4},
+                   {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
+               }
+                );
+
+               maps.emplace_back(
+                    std::vector<std::string>{"assets/labs/tiles/wallLeft.png", "assets/labs/tiles/wallCentr.png", "assets/labs/tiles/wallRight.png",
+               "assets/labs/tiles/left.png", "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
+               "assets/labs/tiles/box.png"}, 
+                    std::vector<std::vector<int>>{
+                   {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
+                   {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, 
+                   {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
@@ -45,13 +75,27 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                    {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4},
                    {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
-               }),
-               player(loadTexturesFromDirectory("assets/entity/Walking"), 
-               loadTexturesFromDirectory("assets/entity/Dying"),
-                200.f, 150.f, 
-               window.getSize().x,
-               window.getSize().y),
-               movingUp(false), movingDown(false), movingLeft(false), movingRight(false) {}
+               }
+               );
+
+               maps.emplace_back(
+                    std::vector<std::string>{"assets/labs/tiles/wallLeft.png", "assets/labs/tiles/wallCentr.png", "assets/labs/tiles/wallRight.png",
+               "assets/labs/tiles/left.png", "assets/labs/tiles/right.png", "assets/labs/tiles/block.png", 
+               "assets/labs/tiles/box.png"}, 
+                    std::vector<std::vector<int>>{
+                   {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
+                   {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4},
+                   {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
+               }
+               );
+}
 
 bool Game::run() {
     while (window.isOpen()) {
@@ -66,8 +110,13 @@ bool Game::run() {
         processEvents();
         update();
 
+        if (player.getPosition().x > window.getSize().x) { // Если игрок выходит за пределы окна справа
+            currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
+            player.setPosition(50.f, 50.f); // Сброс позиции игрока в новой карте
+        }
+
         window.clear();
-        gameMap.draw(window);
+        maps[currentMapIndex].draw(window);
         player.draw(window);
         window.display();
     }
@@ -78,7 +127,7 @@ void Game::processEvents() {
     //window.setKeyboardFocus(true);
     window.setActive(true); 
 
-    if (!right) {
+    if (true) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -109,32 +158,34 @@ void Game::processEvents() {
 
 void Game::update() {
     float deltaTime = gameClock.restart().asSeconds(); // Получаем время с последнего кадра
-    
+
     if (movingUp) {
-        std::cout << "Moving up" << std::endl; 
-        player.move(0.f, -speed, gameMap);
+        player.move(0.f, -speed, maps[currentMapIndex]);
     }
     if (movingDown) {
-        std::cout << "Moving down" << std::endl; 
-        player.move(0.f, speed, gameMap);
+        player.move(0.f, speed, maps[currentMapIndex]);
     }
     if (movingLeft) {
-        std::cout << "Moving left" << std::endl;
         player.updateSprite(true);
-        player.move(-speed, 0.f, gameMap);
+        player.move(-speed, 0.f, maps[currentMapIndex]);
     }
     if (movingRight) {
-        std::cout << "Moving right" << std::endl; 
         player.updateSprite(false);
-        player.move(speed, 0.f, gameMap);
+        player.move(speed, 0.f, maps[currentMapIndex]);
     }
 
-    gameMap.updateEnemies(deltaTime, player);
     player.update(deltaTime);
 
     if (player.end) {
         isGameOver = true; // Завершаем игру
     }
+
+    maps[currentMapIndex].updateEnemies(deltaTime, player);
+
+    if (maps[currentMapIndex].isExitTile(player.getPosition())) { 
+        currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
+        player.setPosition(50.f, 150.f); // Сброс позиции игрока в новой карте
+    } 
 }
 
 void Game::restart() {
@@ -142,7 +193,7 @@ void Game::restart() {
 
     player.resetState();
 
-    gameMap.reset();                   // Предполагается, что у вас есть метод для сброса карты
+    maps[currentMapIndex].reset();                   // Предполагается, что у вас есть метод для сброса карты
 
     // Сброс флагов движения
     movingUp = false;

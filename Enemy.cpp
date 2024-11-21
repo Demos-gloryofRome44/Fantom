@@ -6,7 +6,7 @@
 Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFile,
         float posX, float posY, float width, float height)
     : currentFrame(0), attackFrame(0), animationSpeed(0.2f), attackAnimationSpeed(0.2f), elapsedTime(0.f), attackElapsedTime(0.f),
-      speed(25.f), lastShotTime(0.f), shootCooldown(1.f), movingRight(true) {
+      speed(25.f), lastShotTime(0.f), shootCooldown(1.f), movingRight(false) {
     
     if (!texture.loadFromFile(textureFile)) {
         std::cerr << "Ошибка загрузки текстуры из " << textureFile << std::endl;
@@ -75,7 +75,7 @@ void Enemy::move(float deltaX, float deltaY, const Map& map) {
     // Проверка типа тайла
     int tileType = map.getTileType(newX, newY);
     
-    if (tileType == -1) { 
+    if (tileType == -1 || tileType == 12) { 
         position.x += deltaX;
         position.y += deltaY;
         sprite.setPosition(position); // Обновляем позицию спрайта
@@ -183,7 +183,7 @@ bool Enemy::canSeePlayer(const Entity& player, const Map& map) {
         size_t newY = static_cast<size_t>((enemyPosition.y + direction.y * d) / tileSize);
 
         int tileType = map.getTileType(newX, newY);
-        if (tileType != -1) { // Если не проходимый тайл
+        if (tileType != -1)  { // Если не проходимый тайл
             return false; // Есть стена между противником и игроком
         }
     }
