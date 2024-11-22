@@ -3,9 +3,10 @@
 #include "Entity.hpp"
 #include <iostream>
 
-Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFile,
+Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFile, const std::string& deathTextureFile,
         float posX, float posY, float width, float height)
-    : currentFrame(0), attackFrame(0), animationSpeed(0.2f), attackAnimationSpeed(0.2f), elapsedTime(0.f), attackElapsedTime(0.f),
+    : currentFrame(0), attackFrame(0), deathFrame(0), animationSpeed(0.2f), attackAnimationSpeed(0.2f), deathAnimationSpeed(0.3f),
+    elapsedTime(0.f), attackElapsedTime(0.f), deathElapsedTime(0.f), 
       speed(25.f), lastShotTime(0.f), shootCooldown(1.f), movingRight(false) {
     
     if (!texture.loadFromFile(textureFile)) {
@@ -15,6 +16,10 @@ Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFil
     }
 
     if (!attackTexture.loadFromFile(attackTextureFile)) {
+        std::cerr << "Ошибка загрузки текстуры атаки из " << attackTextureFile << std::endl;
+    }
+
+    if (!deathTexture.loadFromFile(deathTextureFile)) {
         std::cerr << "Ошибка загрузки текстуры атаки из " << attackTextureFile << std::endl;
     }
 
@@ -60,6 +65,33 @@ void Enemy::attackAnimate(float deltaTime) {
             
         attackElapsedTime = 0.f; 
     }
+
+    sprite.setPosition(position.x, position.y + 4.f); 
+
+}
+
+void Enemy::deathAnimation(float deltaTime){
+    deathElapsedTime += deltaTime;
+
+    if (deathFrame == 4){
+        sprite.setPosition(position.x, position.y + 9.f); 
+        return;
+    }
+
+    // Обновляем анимацию смерти на основе времени
+    if (deathElapsedTime >= deathAnimationSpeed) {
+        deathFrame = (deathFrame) % 4; 
+
+        int frameWidth = 71 + 46; 
+        int frameHeight = 63; 
+
+        sprite.setTexture(deathTexture);
+        sprite.setTextureRect(sf::IntRect(41 + deathFrame * frameWidth, 68, frameWidth, frameHeight));
+        sprite.setPosition(position.x, position.y + 9.f); 
+        
+        deathFrame += 1;
+        deathElapsedTime = 0.f; // Сбрасываем время
+    }
 }
 
 void Enemy::move(float deltaX, float deltaY, const Map& map) {
@@ -75,7 +107,7 @@ void Enemy::move(float deltaX, float deltaY, const Map& map) {
     // Проверка типа тайла
     int tileType = map.getTileType(newX, newY);
     
-    if (tileType == -1 || tileType == 12) { 
+    if (tileType == -1 || tileType >= 20) { 
         position.x += deltaX;
         position.y += deltaY;
         sprite.setPosition(position); // Обновляем позицию спрайта
@@ -85,8 +117,18 @@ void Enemy::move(float deltaX, float deltaY, const Map& map) {
     }
 }
 
-void Enemy::update(float deltaTime, const Map& map, Entity &player) {
+void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::vector<Explosion>& explosions) {
 
+    // Проверка на столкновение с взрывами
+    for (const auto& explosion : explosions) {
+        if (getBounds().intersects(explosion.getBounds())) {
+            isAllive = false;
+            std::cout << "enemy died" << std::endl;
+            //return; // Выходим из метода после смерти
+        }
+    }
+    
+    if (isAllive) {
     if (canSeePlayer(player, map)) {
         if (true){
         std::cout<<"противник видит игрока, останавливаемся и начинаем стрелять"<<std::endl;
@@ -106,7 +148,6 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player) {
         sprite.setTextureRect(sf::IntRect(50, 60, 35, 70)); 
         attackFlag = false;
     } else {
-
         animate(deltaTime);
         // Если не видит игрока, продолжаем движение
         float direction = movingRight ? speed * deltaTime : -speed * deltaTime;
@@ -114,8 +155,10 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player) {
 
         sprite.setScale(movingRight ? 1.f : -1.f, 1.f); // Поворот текстуры
     }
-
-    for (size_t i = 0; i < bullets.size(); ) {
+    } else {
+        deathAnimation(deltaTime);
+    }
+        for (size_t i = 0; i < bullets.size(); ) {
         bullets[i].update(deltaTime); // Обновляем пулю
 
         // Проверка на столкновение с тайлом
@@ -124,7 +167,7 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player) {
         
         int tileType = map.getTileType(bulletX, bulletY);
         
-        if (tileType != -1) { // Если тайл не проходимый
+        if (tileType != -1 && tileType < 20 ) { // Если тайл не проходимый
             bullets.erase(bullets.begin() + i); // Удаляем пулю из вектора
         } else {
            if (checkCollisionWithPlayer(bullets[i], player)) {
@@ -134,7 +177,7 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player) {
                 ++i; // Переходим к следующей пуле только если не удалили текущую
             }
         }
-    }
+    } 
 }
 
 bool Enemy::checkCollisionWithPlayer(const Bullet& bullet, const Entity& player) const {
@@ -183,7 +226,7 @@ bool Enemy::canSeePlayer(const Entity& player, const Map& map) {
         size_t newY = static_cast<size_t>((enemyPosition.y + direction.y * d) / tileSize);
 
         int tileType = map.getTileType(newX, newY);
-        if (tileType != -1)  { // Если не проходимый тайл
+        if (tileType != -1 && tileType < 20)  { // Если не проходимый тайл
             return false; // Есть стена между противником и игроком
         }
     }

@@ -9,6 +9,7 @@
 
 class Entity;
 class Enemy;
+class Explosion;
 class Map {
 public:
     // Конструктор, который загружает текстуры и устанавливает карту
@@ -24,7 +25,7 @@ public:
     float getTileSize() const {return tileSize; }
     sf::FloatRect getTileBounds(size_t x, size_t y) const; // Получение границ тайла
 
-    void updateEnemies(float deltaTime, Entity &player); // Новый метод для обновления противников
+    void updateEnemies(float deltaTime, Entity &player, const std::vector<Explosion>& explosions); // Новый метод для обновления противников
 
     void reset();
 

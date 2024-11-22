@@ -16,7 +16,8 @@ Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::ve
     // Установка карты
     map = mapData;
 
-    enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 400.f, 219.f, 50.f, 50.f); 
+    enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 
+    "assets/enemy/Soldier_1/Dead.png", 400.f, 219.f, 50.f, 50.f); 
 }
 
 // Метод для отрисовки карты
@@ -64,9 +65,9 @@ sf::FloatRect Map::getTileBounds(size_t x, size_t y) const {
     return sf::FloatRect(x * tileSize, y * tileSize, tileSize, tileSize);
 }
 
-void Map::updateEnemies(float deltaTime, Entity &player) {
+void Map::updateEnemies(float deltaTime, Entity &player, const std::vector<Explosion>& explosions) {
     for (auto& enemy : enemies) {
-        enemy.update(deltaTime, *this, player); 
+        enemy.update(deltaTime, *this, player, explosions); 
     }
 }
 

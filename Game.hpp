@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.hpp"
 #include "Map.hpp"
+#include "Explosion.hpp"
 
 
 class Game {
@@ -13,6 +14,8 @@ public:
     void processEvents();
     void update();
     void restart();
+
+    void triggerExplosion(sf::Vector2f position);
 
 private:
     sf::RenderWindow window;
@@ -28,6 +31,7 @@ private:
 
     bool right = false;
     bool left = false;
+    bool turn = true;
 
     sf::Clock gameClock; 
 
@@ -37,6 +41,10 @@ private:
 
     std::vector<Map> maps; // Вектор для хранения разных карт
     int currentMapIndex = 0; // Индекс текущей карты
+
+    std::vector<Explosion> explosions;
+    float explosionCooldown = 1.0f; // Время между взрывами (в секундах)
+    float lastExplosionTime = 0.0f; // Время последнего взрыва
 
 };
 #endif // GAME_H

@@ -73,7 +73,7 @@ bool Entity::checkCollision(const Map& map) {
         for (size_t x = 0; x < map.getWidth(); ++x) {
             int tileType = map.getTileType(x, y); // Получаем тип тайла
             
-            if (tileType != -1 && tileType != 12) { // Проверяем типы блоков
+            if (tileType != -1 && tileType < 20) { // Проверяем типы блоков
                 sf::FloatRect tileBounds = map.getTileBounds(x, y); // Получаем границы тайла
                 
                 if (playerBounds.intersects(tileBounds)) {
@@ -111,7 +111,7 @@ void Entity::update(float deltaTime) {
             }
         }
 
-        if (currentDeathFrame == dieTextures.size() - 1 && deathElapsedTime == 0.f) {
+        if (currentDeathFrame == dieTextures.size() - 1) {
             std::cout << "Анимация смерти завершена." << std::endl;
             end = true;
             return;

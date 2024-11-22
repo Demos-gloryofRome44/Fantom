@@ -83,9 +83,9 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4},
+                   {3, -1, -1, -1, -1, -1, 21, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1, -1,  6, -1, -1, 21, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   {3, -1,  6,  6, -1, -1, 20, -1, -1, -1, -1, -1, -1, -1, -1, 4},
                    {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
                }
                );
@@ -127,6 +127,11 @@ bool Game::run() {
         window.clear();
         maps[currentMapIndex].draw(window);
         player.draw(window);
+
+        for (auto& explosion : explosions) {
+            explosion.draw(window); // Рисуем все взрывы
+        }
+
         window.display();
     }
     return true;
@@ -146,13 +151,15 @@ void Game::processEvents() {
             window.close();
 
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::W) { 
-                movingUp = true;
-                std::cout << "W pressed" << std::endl;
-            }
+            if (event.key.code == sf::Keyboard::W) movingUp = true;            
             if (event.key.code == sf::Keyboard::S) movingDown = true;
             if (event.key.code == sf::Keyboard::A) movingLeft = true;
             if (event.key.code == sf::Keyboard::D) movingRight = true;
+            if (event.key.code == sf::Keyboard::Space && lastExplosionTime >= explosionCooldown)  { // Проверка на пробел
+                    triggerExplosion(player.getPosition()); // Вызываем взрыв на позиции игрока
+                    std::cout << "tab pressed" << std::endl;
+                    lastExplosionTime = 0.0f;
+                }
         }
 
         if (event.type == sf::Event::KeyReleased) {
@@ -167,6 +174,7 @@ void Game::processEvents() {
 
 void Game::update() {
     float deltaTime = gameClock.restart().asSeconds(); // Получаем время с последнего кадра
+    lastExplosionTime += deltaTime;
 
     if (movingUp) {
         player.move(0.f, -speed, maps[currentMapIndex]);
@@ -177,10 +185,12 @@ void Game::update() {
     if (movingLeft) {
         player.updateSprite(true);
         player.move(-speed, 0.f, maps[currentMapIndex]);
+        turn = false;
     }
     if (movingRight) {
         player.updateSprite(false);
         player.move(speed, 0.f, maps[currentMapIndex]);
+        turn = true;
     }
 
     player.update(deltaTime);
@@ -189,7 +199,17 @@ void Game::update() {
         isGameOver = true; // Завершаем игру
     }
 
-    maps[currentMapIndex].updateEnemies(deltaTime, player);
+    for (auto it = explosions.begin(); it != explosions.end(); ) {
+        it->update(deltaTime); // Обновляем анимацию взрыва
+
+        if (it->isFinished()) { // Проверяем завершение анимации
+            it = explosions.erase(it); // Удаляем завершенные взрывы
+        } else {
+            ++it; // Переходим к следующему взрыву
+        }
+    }
+
+    maps[currentMapIndex].updateEnemies(deltaTime, player, explosions);
 
     if (maps[currentMapIndex].isExitTile(player.getPosition())) { 
         currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
@@ -212,4 +232,12 @@ void Game::restart() {
 
     // Сброс состояния окончания игры
     isGameOver = false;                // Устанавливаем флаг окончания игры в false
+}
+
+void Game::triggerExplosion(sf::Vector2f position) {
+    if (turn) {
+        explosions.emplace_back(position.x + 12, position.y + 12); // Создаем новый взрыв
+    } else {
+        explosions.emplace_back(position.x - 12, position.y + 12); // Создаем новый взрыв
+    }
 }
