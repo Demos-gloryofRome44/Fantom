@@ -41,7 +41,7 @@ Entity::Entity(const std::vector<std::string>& textureFiles, const std::vector<s
               << ", " << bounds.width << ", " << bounds.height << std::endl;
 }
 
-void Entity::move(float x, float y, const Map &map) {
+void Entity::move(float x, float y, Map &map) {
     sf::Vector2f currentPosition = sprite.getPosition();
 
     sprite.move(x, y);
@@ -64,18 +64,35 @@ void Entity::updateSprite(bool turn) {
     }
 }
 
-bool Entity::checkCollision(const Map& map) {
+bool Entity::checkCollision(Map& map) {
     // Получаем границы игрока
     sf::FloatRect playerBounds = getBounds();
 
     // Проходим по всем тайлам карты
     for (size_t y = 0; y < map.getHeight(); ++y) {
         for (size_t x = 0; x < map.getWidth(); ++x) {
+            sf::FloatRect tileBounds = map.getTileBounds(x, y); // Получаем границы тайла
+
             int tileType = map.getTileType(x, y); // Получаем тип тайла
+
+            if (tileType == 50) {                
+                if (playerBounds.intersects(tileBounds)) {
+                    doorActivation = true;
+                    map.setDoorActivation(doorActivation);
+                }
+            }
+
+            if (tileType == 11 && doorActivation) {
+                sf::FloatRect back = map.getTileBounds(x, y - 1);
+                if (playerBounds.intersects(tileBounds)) {
+                    return false; // Столкновение обнаружено
+                }
+                if (playerBounds.intersects(back)) {
+                    return false; // Столкновение обнаружено
+                }
+            }
             
-            if (tileType != -1 && tileType < 20) { // Проверяем типы блоков
-                sf::FloatRect tileBounds = map.getTileBounds(x, y); // Получаем границы тайла
-                
+            if (tileType != -1 && tileType < 20) { // Проверяем типы блоков                
                 if (playerBounds.intersects(tileBounds)) {
                     return true; // Столкновение обнаружено
                 }

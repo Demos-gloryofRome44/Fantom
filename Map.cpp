@@ -32,11 +32,19 @@ void Map::draw(sf::RenderWindow& window) {
             if (tileType == -1) {
                 continue; // Игнорируем фон
             }
-            if (textures.find(tileType) != textures.end()) { // Проверка на наличие текстуры по индексу
+            if (textures.find(tileType) != textures.end() && tileType != 11) { // Проверка на наличие текстуры по индексу
                 sf::Sprite sprite;
                 sprite.setTexture(textures[tileType]); // Получаем текстуру по индексу
                 sprite.setPosition(x * tileSize, y * tileSize); 
                 window.draw(sprite); 
+            }
+
+            if (tileType == 11) { // Предполагаем, что 11 - это ID двери
+                sf::Sprite doorSprite;
+                doorSprite.setTexture(textures[tileType]); // Получаем текстуру двери
+                doorSprite.setTextureRect(sf::IntRect(32 * currentDoorFrame, 0, 32, 64)); // Устанавливаем текущий кадр анимации
+                doorSprite.setPosition(x * tileSize, y * tileSize); // Устанавливаем позицию двери
+                window.draw(doorSprite); // Рисуем дверь с анимацией
             }
         }
     }
@@ -49,7 +57,7 @@ void Map::draw(sf::RenderWindow& window) {
 bool Map::isExitTile(const sf::Vector2f& position) const {
     for (size_t y = 0; y < map.size(); ++y) {
         for (size_t x = 0; x < map[y].size(); ++x) {
-            if (map[y][x] == 4) { 
+            if (map[y][x] == 111) { 
                 sf::FloatRect tileBounds = getTileBounds(x, y);
                 if (tileBounds.contains(position)) {
                     return true; // Игрок находится на тайле выхода
@@ -70,6 +78,31 @@ void Map::updateEnemies(float deltaTime, Entity &player, const std::vector<Explo
         enemy.update(deltaTime, *this, player, explosions); 
     }
 }
+
+void Map::update(float deltaTime) {
+    sf::Sprite sprite;
+    // Проверка состояния двери
+    if (doorActivation) {
+    for (size_t y = 0; y < map.size(); ++y) {
+        for (size_t x = 0; x < map[y].size(); ++x) {
+            int tileType = map[y][x];
+            if (tileType == 11) { // Проверяем, является ли тайл дверью
+                doorAnimationTime += deltaTime; // Увеличиваем время анимации
+                        if (doorAnimationTime >= doorFrameDuration) {
+                            currentDoorFrame++; // Переход к следующему кадру анимации
+                            doorAnimationTime = 0.f; // Сброс времени анимации
+                        }
+                        if (currentDoorFrame >= 5) { // Если достигли конца анимации
+                            currentDoorFrame = 4; // Устанавливаем последний кадр
+                        }
+                } 
+        }
+    }
+    }
+
+}
+    
+
 
 void Map::reset() {
     map = {

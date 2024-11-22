@@ -27,11 +27,11 @@ public:
 
     sf::FloatRect getBounds() const { return sprite.getGlobalBounds(); }
 
-    bool checkCollision(const Map& map);
+    bool checkCollision(Map& map);
     bool right = true;
     bool left = false;
     
-    void move(float x, float y, const Map& map);
+    void move(float x, float y, Map& map);
     void draw(sf::RenderWindow& window);
     void update(float deltaTime); // Метод обновления анимации
 
@@ -45,6 +45,8 @@ public:
     void die();
     bool isAlive = true;
     bool end = false;
+
+    bool doorActivation = false;
 };
 
 #endif // ENTITY_H

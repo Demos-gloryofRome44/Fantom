@@ -31,6 +31,10 @@ public:
 
     bool isExitTile(const sf::Vector2f& position) const;
 
+    void update(float deltaTime);
+    bool doorActivation = false;
+    void setDoorActivation(bool activation) {doorActivation = activation; }
+
 private:
     sf::Texture backgroundTexture; // Текстура для фона
      sf::Sprite backgroundSprite;   // Спрайт для фона
@@ -39,6 +43,10 @@ private:
     const float tileSize = 32.f;        // Размер тайла (можно изменить)
 
     std::vector<Enemy> enemies;
+
+    int currentDoorFrame = 0; 
+    float doorAnimationTime = 0.f; // Время анимации
+    const float doorFrameDuration = 0.1f; // Длительность одного
 
 };
 

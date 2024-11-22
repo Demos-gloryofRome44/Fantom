@@ -50,27 +50,30 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
         {8, "assets/labs/tiles/box.png"},
         {9, "assets/labs/tiles/krest.png"},
         {10, "assets/labs/tiles/block.png"},
+        {11, "assets/labs/animate/Entry.png"},
 
         {20, "assets/labs/tiles/stolb.png"},
         {21, "assets/labs/tiles/stolb1.png"},
         {22,"assets/labs/Objects/locker.png"},
         {23,"assets/labs/Objects/Box1.png"},
         {24,"assets/labs/Objects/Box1.png"},
-        {25,"assets/labs/Objects/Box1.png"}
+        {25,"assets/labs/Objects/Box1.png"},
+
+        {50, "assets/labs/animate/Screen2.png"}
     };
 
 
                 maps.emplace_back(textureFiles,
                     std::vector<std::vector<int>>{
                    {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
-                   {3, -1, -1, -1, -1, -1, -1, 21, -1, -1, 21, -1, -1, -1, -1, -1}, 
-                   {3, 23, -1, -1, -1, -1, -1, 20, -1, -1, 20, -1, -1, -1, -1, -1}, 
+                   {3, -1, -1, -1, -1, -1, -1, 21, -1, -1, 21, -1, -1, -1, -1, 11}, 
+                   {3, 23, -1, -1, -1, -1, -1, 20, -1, -1, 20, -1, -1, -1, -1, 19}, 
                    {3,  6, -1, -1, -1, -1, -1,  9,  9,  9,  9, -1, -1,  5,  6, 7}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1,  8, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, 22, 4}, 
-                   {3, -1,  8,  8, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, 22, 4},
+                   {3, -1,  8,  8, -1, 10, 50, -1, -1, -1, -1, -1, -1, -1, 22, 4},
                    {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
                }
                 );
@@ -141,7 +144,7 @@ void Game::processEvents() {
     //window.setKeyboardFocus(true);
     window.setActive(true); 
 
-    if (true) {
+    if (!right) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -194,7 +197,7 @@ void Game::update() {
     }
 
     player.update(deltaTime);
-
+ 
     if (player.end) {
         isGameOver = true; // Завершаем игру
     }
@@ -210,6 +213,7 @@ void Game::update() {
     }
 
     maps[currentMapIndex].updateEnemies(deltaTime, player, explosions);
+    maps[currentMapIndex].update(deltaTime);
 
     if (maps[currentMapIndex].isExitTile(player.getPosition())) { 
         currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
