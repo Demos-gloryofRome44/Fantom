@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Entity.hpp"
 #include "Map.hpp"
 #include "Explosion.hpp"
@@ -19,10 +20,8 @@ public:
 
 private:
     sf::RenderWindow window;
-    //Map gameMap;
+    
     Entity player;
-
-        // Спрайт для фона
 
     bool movingUp;// движение игрока в зависимости прожатой кнопки
     bool movingDown;
