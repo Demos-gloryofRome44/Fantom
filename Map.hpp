@@ -35,6 +35,7 @@ public:
     bool doorActivation = false;
     void setDoorActivation(bool activation) {doorActivation = activation; }
 
+    std::vector<sf::Vector2f> visitedCrystals; // Вектор для хранения позиций кристаллов
 private:
     sf::Texture backgroundTexture; // Текстура для фона
      sf::Sprite backgroundSprite;   // Спрайт для фона
@@ -47,6 +48,7 @@ private:
     int currentDoorFrame = 0; 
     float doorAnimationTime = 0.f; // Время анимации
     const float doorFrameDuration = 0.1f; // Длительность одного
+
 
 };
 

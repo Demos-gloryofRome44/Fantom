@@ -71,9 +71,21 @@ bool Entity::checkCollision(Map& map) {
     // Проходим по всем тайлам карты
     for (size_t y = 0; y < map.getHeight(); ++y) {
         for (size_t x = 0; x < map.getWidth(); ++x) {
-            sf::FloatRect tileBounds = map.getTileBounds(x, y); // Получаем границы тайла
+            sf::FloatRect tileBounds = map.getTileBounds(x, y); 
 
-            int tileType = map.getTileType(x, y); // Получаем тип тайла
+            int tileType = map.getTileType(x, y); 
+
+            if (tileType == 100) {
+                sf::Vector2f crystalPosition(x * map.getTileSize(), y * map.getTileSize());
+                if (playerBounds.intersects(tileBounds)) {
+                    if (std::find(map.visitedCrystals.begin(), map.visitedCrystals.end(), crystalPosition) == map.visitedCrystals.end()) {
+                        map.visitedCrystals.emplace_back(crystalPosition); // Добавляем позицию кристалла
+                        std::cout << "Кристалл собран!" << std::endl; 
+                        maxEnergy += 50.f;
+                        showEnergyIncreaseMessage();
+                    }
+                }
+            }
 
             if (tileType == 50) {                
                 if (playerBounds.intersects(tileBounds)) {
@@ -109,22 +121,19 @@ void Entity::draw(sf::RenderWindow& window) {
 
 void Entity::update(float deltaTime) {
     if (!isAlive) {
-        // Если мертв, обновляем анимацию смерти
         deathElapsedTime += deltaTime;
 
         if (deathElapsedTime >= deathAnimationSpeed) {
             if (currentDeathFrame == 0) {
                 currentDeathFrame = 1;
-                sprite.setTexture(dieTextures[currentDeathFrame]); // Устанавливаем первую текстуру смерти
+                sprite.setTexture(dieTextures[currentDeathFrame]); 
                 sprite.setTextureRect(sf::IntRect(135, 30, 220, 290));
             }
             else {
-            currentDeathFrame = (currentDeathFrame + 1) % dieTextures.size(); // Переход к следующему кадру
-            sprite.setTexture(dieTextures[currentDeathFrame]); // Устанавливаем новую текстуру для анимации смерти
+            currentDeathFrame = (currentDeathFrame + 1) % dieTextures.size(); 
+            sprite.setTexture(dieTextures[currentDeathFrame]); 
             
-            // Устанавливаем новый прямоугольник текстуры
-
-            deathElapsedTime = 0.f; // Сбрасываем время
+            deathElapsedTime = 0.f; 
             }
         }
 
@@ -150,19 +159,34 @@ sf::Vector2f Entity::getPosition() const {
 }
 
 void Entity::setPosition(float x, float y) {
-    sprite.setPosition(x, y); // Устанавливаем позицию спрайта
+    sprite.setPosition(x, y); 
 }
 
 void Entity::die() {
-    if (!isAlive) return; // Если уже мертв, ничего не делаем
+    if (!isAlive) return; 
 
-    isAlive = false; // Устанавливаем состояние мертвым
+    isAlive = false; 
 
     std::cout << "Игрок умер!" << std::endl;
 }
 
 bool Entity::isOnGround(Map &map) {
    return checkCollision(map); 
+}
+
+void Entity::showEnergyIncreaseMessage() {
+    if (!font.loadFromFile("assets/DsStamper.ttf")) { // Загрузите шрифт
+        std::cerr << "Ошибка загрузки шрифта!" << std::endl;
+    }
+    std::cout << "Максимальная энергия увеличена: " << maxEnergy;
+    
+    messageText.setFont(font); 
+    messageText.setString("death is comming"); 
+    messageText.setCharacterSize(30); 
+    messageText.setFillColor(sf::Color::Red); 
+
+    messageText.setPosition(130.f, 100.f);
+    showMessage = true;
 }
 
 void Entity::resetState() {

@@ -8,53 +8,59 @@
 class Map;
 class Entity {
 public:
+    Entity(const std::vector<std::string>& textureFiles, const std::vector<std::string>& dieTextures,
+           float posX, float posY, float width, float height);
+
+    // Методы для работы с объектом
+    sf::FloatRect getBounds() const { return sprite.getGlobalBounds(); }
+    bool checkCollision(Map& map);
+    void move(float x, float y, Map& map);
+    void draw(sf::RenderWindow& window);
+    void update(float deltaTime); // Метод обновления анимации
+    void updateSprite(bool turn);
+    sf::Vector2f getPosition() const;
+    void setPosition(float x, float y); 
+    void resetState();
+    void die();
+    bool isOnGround(Map &map); // Проверка на земле
+    void showEnergyIncreaseMessage();
+
+    // Параметры состояния
+    bool isAlive = true;
+    bool end = false;
+    bool doorActivation = false;
+    bool flying = false; // Флаг полета
+    bool showMessage = false; 
+
+    // Энергия
+    float currentEnergy = 50.f; // Текущая энергия
+    float maxEnergy = 100.f; // Максимальная энергия
+    const float energyConsumptionRate = 50.f; // Расход энергии за секунду при полете
+    const float energyRecoveryRate = 25.f; // Восстановление энергии в секунду
+
+    // Сообщение о повышении энергии
+    float messageDisplayTime = 0.f;
+    sf::Text messageText; 
+
+private:
+    // Текстуры и спрайты
     sf::Texture texture;
     sf::Texture dieTexture;
     sf::Sprite sprite;
     sf::CircleShape circle;
-    std::vector<sf::Texture> textures; // Вектор для хранения 
+    
+    std::vector<sf::Texture> textures; // Вектор для хранения текстур
     std::vector<sf::Texture> dieTextures;
-    int currentFrame; // Текущий кадр анимации
-    int currentDeathFrame; // Текущий кадр анимации смерти
-    float animationSpeed; // Скорость анимации
+
+    // Анимация
+    int currentFrame; 
+    int currentDeathFrame; 
+    float animationSpeed; 
     float deathAnimationSpeed; // Скорость анимации смерти
     float elapsedTime;
     float deathElapsedTime; // Время для анимации смерти
 
-    // Конструктор
-    Entity(const std::vector<std::string>& textureFiles, const std::vector<std::string>& dieTextures,
-     float posX, float posY, float width, float height);
-
-    sf::FloatRect getBounds() const { return sprite.getGlobalBounds(); }
-
-    bool checkCollision(Map& map);
-    bool right = true;
-    bool left = false;
-    
-    void move(float x, float y, Map& map);
-    void draw(sf::RenderWindow& window);
-    void update(float deltaTime); // Метод обновления анимации
-
-    void updateSprite(bool turn);
-
-    sf::Vector2f getPosition() const;
-    void setPosition(float x, float y); 
-
-    void resetState();
-
-    void die();
-    bool isAlive = true;
-    bool end = false;
-
-    bool doorActivation = false;
-
-    bool isOnGround(Map &map); // Проверка на земле
-
-    float currentEnergy; // Текущая энергия
-    const float maxEnergy = 100.f; // Максимальная энергия
-    const float energyConsumptionRate = 20.f; // Расход энергии за секунду при полете
-    const float energyRecoveryRate = 10.f; // Восстановление энергии в секунду
-    bool flying = false; // Флаг полета
+    sf::Font font; 
 };
 
 #endif // ENTITY_H

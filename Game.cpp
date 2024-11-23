@@ -33,7 +33,7 @@ std::vector<std::string> loadTexturesFromDirectory(const std::string& directory)
 Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                player(loadTexturesFromDirectory("assets/entity/Walking"), 
                loadTexturesFromDirectory("assets/entity/Dying"),
-                200.f, 150.f, 
+                32.f, 219.f, 
                window.getSize().x,
                window.getSize().y),
                movingUp(false), movingDown(false), movingLeft(false), movingRight(false) {
@@ -64,6 +64,14 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
         {20, "assets/labs/tiles/shaxt.png"},
         {21, "assets/labs/tiles/redBlock.png"},
 
+        {22, "assets/labs/tilesTown/Tile_01.png"},
+        {23, "assets/labs/tilesTown/Tile_02.png"},
+        {24, "assets/labs/tilesTown/Tile_04.png"},
+        {25, "assets/labs/tilesTown/Tile_10.png"},
+        {26, "assets/labs/tilesTown/Tile_13.png"},
+        {27, "assets/labs/tilesTown/Tile_24.png"},
+        {28, "assets/labs/tilesTown/Tile_12.png"},
+
 
 
         {40, "assets/labs/tiles/stolb.png"},
@@ -88,9 +96,15 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
         {59, "assets/labs/Objects/fence2.png"},
         {60, "assets/labs/Objects/fence3.png"},
 
+        {61, "assets/labs/outObjects/trees/3.png"},
+        {62, "assets/labs/outObjects/other/Pointer1.png"},
+        {63, "assets/labs/outObjects/Stones/6.png"},
+        {64, "assets/labs/outObjects/Grass/16.png"},
+        {65, "assets/labs/tiles/white.png"},
 
+        {50, "assets/labs/animate/Screen2.png"},
 
-        {50, "assets/labs/animate/Screen2.png"}
+        {100, "assets/labs/diamond.png"}
     };
 
                 // 1-уровень
@@ -98,7 +112,7 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                     std::vector<std::vector<int>>{
                    {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
                    {3, -1, -1, -1, -1, -1, -1, 41, -1, -1, 41, -1, -1, -1, -1, 11}, 
-                   {3, 43, -1, -1, -1, -1, -1, 40, -1, -1, 40, -1, -1, -1, -1, 39}, 
+                   {3, 43, -1, -1, -1, -1, -1, 40, -1,100, 40, -1, -1, -1, -1, 39}, 
                    {3,  6, -1, -1, -1, -1, -1,  9,  9,  9,  9, -1, -1,  5,  6, 7}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
@@ -106,16 +120,16 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                    {3, -1, -1,  8, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, 42, 4}, 
                    {3, -1,  8,  8, -1, 10, 50, -1, -1, -1, -1, -1, -1, -1, 42, 4},
                    {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
-               }
+                }
                 );
 
                // 2-уровень
                maps.emplace_back(textureFiles,
                     std::vector<std::vector<int>>{
-                   { 0,  1,  1,  1,  1,  1,  1,  1, 16, 17, 17, 17, 17,  1,  1,  1, 2}, 
-                   {19, -1, -1, -1, -1, -1, -1, -1, 15, -1, -1, -1, -1,  -1, -1, 4}, 
-                   {39, -1, -1, -1, -1, -1, -1, -1, 15, -1, -1, -1, -1, -1, -1, 4}, 
-                   { 3, -1, -1, -1, -1, -1, -1, -1, 15, -1, 50, -1, -1, -1, -1, 4}, 
+                   { 0,  1,  1,  1,  1, 16,  1,  1, 16, 17, 17, 17, 17,  1,  1,  1, 2}, 
+                   {19, -1, -1, -1, -1, 21, -1, 57, 15, -1, -1, -1, -1,  -1, -1, 4}, 
+                   {39, -1, -1, -1, -1, 21,100, -1, 15, -1, -1, -1, -1, -1, -1, 4}, 
+                   { 3, -1, -1, -1, -1, 12, 21, -1, 15, -1, 50, -1, -1, -1, -1, 4}, 
                    { 3, -1, -1, -1, -1, -1, -1, -1, 12, 13, 13, 13, 14, -1, -1, 4}, 
                    { 3, -1, -1, -1, -1, -1, -1, -1, 41, -1, -1, -1, 41, -1, -1, 4}, 
                    { 3, 45, -1, -1, -1, -1, -1, -1, 41, -1, -1, -1, 41, -1, -1, 11}, 
@@ -130,13 +144,13 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                     std::vector<std::vector<int>>{
                    { 0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
                    { 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   { 3, -1, -1, -1, 43, 44, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   { 3, 13, -1, 16, 17, 17, -1, -1, -1, -1, -1, -1, -1,  4,  4, 4}, 
-                   { 3, -1, -1, 21, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {19, -1, -1, 21, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
+                   { 3, -1, -1, -1, 43, 44, -1, -1, -1, -1, -1, 52, 28, 53, 54, 4}, 
+                   { 3, 13, -1, 16, 17, 17, -1, -1, -1, -1, 28, 28, 28, 28, 28, 4}, 
+                   { 3, -1, -1, 21, -1, -1, -1, -1, -1, -1, 28, -1, -1, -1, -1, 4}, 
+                   {19, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
                    {39, -1, -1, 21, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   { 3,  9, 20, 21, 56, 55, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11}, 
-                   { 3, 20,  9,  6, 50, 43, -1, -1, -1,  8, -1, -1, -1, -1, -1, 39},
+                   { 3,  9, 20, 21, 56, 55, -1, -1, -1, -1, -1, -1, -1, 20, -1, 11}, 
+                   { 3, 20,  9,  6, 50, 43, -1, -1, -1, -1, -1,  8, 20, 20, -1, 39},
                    { 6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
                }
                );
@@ -146,14 +160,30 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                     std::vector<std::vector<int>>{
                    { 0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
                    { 3, -1, -1, 46, -1, -1, -1, 46, -1, -1, -1, -1, -1, -1, -1, 8}, 
-                   { 3, -1, -1, 46, 43, 44, -1, 46, 58, 59, 60, -1, -1, -1, -1, 8}, 
+                   { 3, -1, -1, 46, 43, 44, -1, 46, 58, 59, 60, -1, -1, -1, 50, 8}, 
                    { 3, 13, -1, 46, 13, 13, 13, 46,  9,  9, 13, -1, -1, 13, 13, 8}, 
                    { 3, -1, -1, 46, -1, -1, -1, 46, -1, -1, -1, -1, -1, -1, -1, 8}, 
                    {19, -1, -1, 46, -1, -1, -1, 46, -1, -1, -1, -1, -1, -1, 57, 8}, 
                    {39, -1, -1, 46, -1, -1, -1, 46, -1, -1, -1, -1, -1, -1, -1, 8}, 
                    { 3,  9, 20, 46, 56, 55, -1, 46, -1, -1, -1, -1, -1, -1, -1, 11}, 
-                   { 3, 20,  9, 46, 43, 43, -1, 46, -1, 50, 45, 45, 45, -1, -1, 39},
+                   { 3, 20,  9, 46, 43, 43, -1, 46, -1, 52, 45, 45, 45, -1, -1, 39},
                    { 6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
+               }
+               );
+
+               // 5-уровень
+               maps.emplace_back(textureFiles,
+                    std::vector<std::vector<int>>{
+                   {22, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 24}, 
+                   {25, -1, -1, 65, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26}, 
+                   {25, -1, -1, 65, 43, 44, -1, -1, -1, -1, 28, -1, -1, 64, -1, 26}, 
+                   {25, 13, -1, 65, 28, 28, 28, -1,  9,  9, 13, -1, -1, 13, 13, 26}, 
+                   {25, -1, -1, 65, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26}, 
+                   {19, -1, -1, 65, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 57, 26}, 
+                   {39, -1, -1, 65, -1, -1, 61, -1, -1, -1, -1, -1, 61, -1, -1, 26}, 
+                   {25,  9, 28, 65, 56, 55, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11}, 
+                   {25, 28,  9, 65, 64, 64, -1, -1, -1, 50, 62, 63, -1, -1, -1, 39},
+                   {27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27}
                }
                );
 
@@ -182,17 +212,17 @@ bool Game::run() {
         processEvents();
         update();
 
-        if (player.getPosition().x > window.getSize().x) { // Если игрок выходит за пределы окна справа
-            currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
-            player.setPosition(50.f, 50.f); // Сброс позиции игрока в новой карте
-        }
-
         window.clear();
         maps[currentMapIndex].draw(window);
         player.draw(window);
 
         window.draw(energyBarBackground); // Отрисовка фона полоски энергии
         window.draw(energyBar);
+        
+        if (player.showMessage) {
+            window.draw(player.messageText); // Отрисовка текстового сообщения
+        }
+        
 
         for (auto& explosion : explosions) {
             explosion.draw(window); // Рисуем все взрывы
@@ -207,7 +237,7 @@ void Game::processEvents() {
     //window.setKeyboardFocus(true);
     window.setActive(true); 
 
-    if (true){
+    if (!right){
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -294,11 +324,21 @@ void Game::update() {
     maps[currentMapIndex].updateEnemies(deltaTime, player, explosions);
     maps[currentMapIndex].update(deltaTime);
 
+    if (player.showMessage) {
+        player.messageDisplayTime += deltaTime; // Увеличиваем время отображения
+
+        if (player.messageDisplayTime >= 2.f) { // Если прошло больше 3 секунд
+            player.showMessage = false; // Скрываем сообщение
+            player.messageDisplayTime = 0.f; // Сбрасываем таймер
+        }
+    }
+
     if (maps[currentMapIndex].isExitTile(player.getPosition())) { 
         currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
         player.setPosition(50.f, 150.f); // Сброс позиции игрока в новой карте
         player.doorActivation = false;
     } 
+
 }
 
 void Game::restart() {

@@ -35,7 +35,7 @@ private:
 
     sf::Clock gameClock; 
 
-    const float speed = 0.1f; // Увеличиваем скорость
+    const float speed = 0.05f; // Увеличиваем скорость
 
     bool isGameOver = false;
 
