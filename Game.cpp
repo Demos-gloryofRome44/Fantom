@@ -158,6 +158,15 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                );
 
 
+               // Инициализация фона полоски энергии
+    energyBarBackground.setSize(sf::Vector2f(80.f, 10.f));
+    energyBarBackground.setFillColor(sf::Color(50, 50, 50)); 
+    energyBarBackground.setPosition(10.f, 10.f); // Позиция в левом верхнем углу
+
+    // Инициализация самой полоски энергии
+    energyBar.setSize(sf::Vector2f(80.f, 10.f)); // Размер полоски
+    energyBar.setFillColor(sf::Color(128, 0, 128)); // Цвет полоски (зеленый)
+    energyBar.setPosition(10.f, 10.f); // Позиция такая же, как у фона
 }
 
 bool Game::run() {
@@ -182,6 +191,9 @@ bool Game::run() {
         maps[currentMapIndex].draw(window);
         player.draw(window);
 
+        window.draw(energyBarBackground); // Отрисовка фона полоски энергии
+        window.draw(energyBar);
+
         for (auto& explosion : explosions) {
             explosion.draw(window); // Рисуем все взрывы
         }
@@ -195,7 +207,7 @@ void Game::processEvents() {
     //window.setKeyboardFocus(true);
     window.setActive(true); 
 
-    if (true) {
+    if (true){
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -230,12 +242,25 @@ void Game::update() {
     float deltaTime = gameClock.restart().asSeconds(); // Получаем время с последнего кадра
     lastExplosionTime += deltaTime;
 
-    if (movingUp) {
+    if (movingUp && player.currentEnergy > 0) {
         player.move(0.f, -speed, maps[currentMapIndex]);
+
+        player.currentEnergy -= player.energyConsumptionRate * deltaTime; // Уменьшаем энергию при движении вверх
+        if (player.currentEnergy < 0) {
+            player.currentEnergy = 0; // Ограничиваем минимальное значение энергии
+        }
     }
-    if (movingDown) {
+    if (movingUp && player.currentEnergy == 0) {
         player.move(0.f, speed, maps[currentMapIndex]);
     }
+    
+    if ((movingDown || !player.isOnGround(maps[currentMapIndex])) && !movingUp) {
+        player.move(0.f, speed, maps[currentMapIndex]);
+        if (player.currentEnergy + player.energyRecoveryRate * deltaTime <= player.maxEnergy) {
+            player.currentEnergy += player.energyRecoveryRate * deltaTime;
+        }
+    }
+
     if (movingLeft) {
         player.updateSprite(true);
         player.move(-speed, 0.f, maps[currentMapIndex]);
@@ -246,6 +271,9 @@ void Game::update() {
         player.move(speed, 0.f, maps[currentMapIndex]);
         turn = true;
     }
+
+    float energyPercentage = player.currentEnergy / player.maxEnergy; // Процент оставшейся энергии
+    energyBar.setSize(sf::Vector2f(80.f * energyPercentage, 10.f));
 
     player.update(deltaTime);
  

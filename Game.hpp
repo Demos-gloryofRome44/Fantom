@@ -46,5 +46,9 @@ private:
     float explosionCooldown = 1.0f; // Время между взрывами (в секундах)
     float lastExplosionTime = 0.0f; // Время последнего взрыва
 
+    // Полоска энергии
+    sf::RectangleShape energyBarBackground; 
+    sf::RectangleShape energyBar; 
+
 };
 #endif // GAME_H

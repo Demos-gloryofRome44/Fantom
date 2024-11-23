@@ -47,6 +47,14 @@ public:
     bool end = false;
 
     bool doorActivation = false;
+
+    bool isOnGround(Map &map); // Проверка на земле
+
+    float currentEnergy; // Текущая энергия
+    const float maxEnergy = 100.f; // Максимальная энергия
+    const float energyConsumptionRate = 20.f; // Расход энергии за секунду при полете
+    const float energyRecoveryRate = 10.f; // Восстановление энергии в секунду
+    bool flying = false; // Флаг полета
 };
 
 #endif // ENTITY_H

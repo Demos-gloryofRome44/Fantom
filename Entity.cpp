@@ -4,7 +4,7 @@
 Entity::Entity(const std::vector<std::string>& textureFiles, const std::vector<std::string>& dieTexturesFile,
  float posX, float posY, float width, float height)
     : currentFrame(0), animationSpeed(0.1f), elapsedTime(0.f), deathAnimationSpeed(0.2f), 
-    currentDeathFrame(0), deathElapsedTime(0.f) {
+    currentDeathFrame(0), deathElapsedTime(0.f){
     
     for (const auto& file : textureFiles) {
         sf::Texture texture;
@@ -159,6 +159,10 @@ void Entity::die() {
     isAlive = false; // Устанавливаем состояние мертвым
 
     std::cout << "Игрок умер!" << std::endl;
+}
+
+bool Entity::isOnGround(Map &map) {
+   return checkCollision(map); 
 }
 
 void Entity::resetState() {
