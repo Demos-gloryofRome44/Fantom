@@ -17,7 +17,7 @@ Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::ve
     map = mapData;
 
     enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 
-    "assets/enemy/Soldier_1/Dead.png", 400.f, 219.f, 50.f, 50.f); 
+    "assets/enemy/Soldier_1/Dead.png", 370.f, 219.f, 50.f, 50.f); 
 }
 
 // Метод для отрисовки карты
@@ -57,9 +57,11 @@ void Map::draw(sf::RenderWindow& window) {
 bool Map::isExitTile(const sf::Vector2f& position) const {
     for (size_t y = 0; y < map.size(); ++y) {
         for (size_t x = 0; x < map[y].size(); ++x) {
-            if (map[y][x] == 111) { 
+            if (map[y][x] == 11) { 
                 sf::FloatRect tileBounds = getTileBounds(x, y);
-                if (tileBounds.contains(position)) {
+                sf::FloatRect back = getTileBounds(x, y - 1);
+
+                if (tileBounds.contains(position) || back.contains(position)) {
                     return true; // Игрок находится на тайле выхода
                 }
             }

@@ -92,7 +92,7 @@ bool Entity::checkCollision(Map& map) {
                 }
             }
             
-            if (tileType != -1 && tileType < 20) { // Проверяем типы блоков                
+            if (tileType != -1 && tileType < 40) { // Проверяем типы блоков                
                 if (playerBounds.intersects(tileBounds)) {
                     return true; // Столкновение обнаружено
                 }

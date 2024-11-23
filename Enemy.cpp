@@ -83,7 +83,7 @@ void Enemy::deathAnimation(float deltaTime){
         deathFrame = (deathFrame) % 4; 
 
         int frameWidth = 71 + 46; 
-        int frameHeight = 63; 
+        int frameHeight = 61; 
 
         sprite.setTexture(deathTexture);
         sprite.setTextureRect(sf::IntRect(41 + deathFrame * frameWidth, 68, frameWidth, frameHeight));
@@ -102,15 +102,15 @@ void Enemy::move(float deltaX, float deltaY, const Map& map) {
         newX = static_cast<size_t>(((position.x + deltaX - 35.f) / tileSize));
     }
 
-    size_t newY = static_cast<size_t>((position.y + deltaY + 10.f) / tileSize);
+    size_t newY = static_cast<size_t>((position.y + deltaY + 40.f) / tileSize);
 
     // Проверка типа тайла
     int tileType = map.getTileType(newX, newY);
     
-    if (tileType == -1 || tileType >= 20) { 
+    if (tileType == -1 || tileType >= 40) { 
         position.x += deltaX;
         position.y += deltaY;
-        sprite.setPosition(position); // Обновляем позицию спрайта
+        sprite.setPosition(position); 
     } else {
         // Если столкнулись со стеной, меняем направление движения
         movingRight = !movingRight; 
@@ -127,12 +127,17 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
             //return; // Выходим из метода после смерти
         }
     }
+
+    if (!flag) {
+        attackAnimate(deltaTime);
+        flag = true;
+    }
     
     if (isAllive) {
     if (canSeePlayer(player, map)) {
         if (true){
         std::cout<<"противник видит игрока, останавливаемся и начинаем стрелять"<<std::endl;
-        flag = false;
+        //flag = false;
         }
         lastShotTime += deltaTime;
         if (lastShotTime >= shootCooldown) {
@@ -167,7 +172,7 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
         
         int tileType = map.getTileType(bulletX, bulletY);
         
-        if (tileType != -1 && tileType < 20 ) { // Если тайл не проходимый
+        if (tileType != -1 && tileType < 40 ) { // Если тайл не проходимый
             bullets.erase(bullets.begin() + i); // Удаляем пулю из вектора
         } else {
            if (checkCollisionWithPlayer(bullets[i], player)) {
@@ -226,7 +231,7 @@ bool Enemy::canSeePlayer(const Entity& player, const Map& map) {
         size_t newY = static_cast<size_t>((enemyPosition.y + direction.y * d) / tileSize);
 
         int tileType = map.getTileType(newX, newY);
-        if (tileType != -1 && tileType < 20)  { // Если не проходимый тайл
+        if (tileType != -1 && tileType < 40)  { // Если не проходимый тайл
             return false; // Есть стена между противником и игроком
         }
     }
