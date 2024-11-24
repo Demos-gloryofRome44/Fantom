@@ -20,7 +20,6 @@ public:
     void updateSprite(bool turn);
     sf::Vector2f getPosition() const;
     void setPosition(float x, float y); 
-    void resetState();
     void die();
     bool isOnGround(Map &map); // Проверка на земле
     void showEnergyIncreaseMessage();
@@ -29,7 +28,7 @@ public:
     bool isAlive = true;
     bool end = false;
     bool doorActivation = false;
-    bool flying = false; // Флаг полета
+    bool flyingDeath = false; // Флаг полета
     bool showMessage = false; 
 
     // Энергия

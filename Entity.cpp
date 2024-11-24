@@ -3,7 +3,7 @@
 
 Entity::Entity(const std::vector<std::string>& textureFiles, const std::vector<std::string>& dieTexturesFile,
  float posX, float posY, float width, float height)
-    : currentFrame(0), animationSpeed(0.1f), elapsedTime(0.f), deathAnimationSpeed(0.2f), 
+    : currentFrame(0), animationSpeed(0.1f), elapsedTime(0.f), deathAnimationSpeed(0.3f), 
     currentDeathFrame(0), deathElapsedTime(0.f){
     
     for (const auto& file : textureFiles) {
@@ -123,26 +123,22 @@ void Entity::update(float deltaTime) {
     if (!isAlive) {
         deathElapsedTime += deltaTime;
 
-        if (deathElapsedTime >= deathAnimationSpeed) {
-            if (currentDeathFrame == 0) {
-                currentDeathFrame = 1;
-                sprite.setTexture(dieTextures[currentDeathFrame]); 
-                sprite.setTextureRect(sf::IntRect(135, 30, 220, 290));
-            }
-            else {
-            currentDeathFrame = (currentDeathFrame + 1) % dieTextures.size(); 
-            sprite.setTexture(dieTextures[currentDeathFrame]); 
-            
-            deathElapsedTime = 0.f; 
-            }
-        }
-
-        if (currentDeathFrame == dieTextures.size() - 1) {
+        if (currentDeathFrame == dieTextures.size() - 11) {
             std::cout << "Анимация смерти завершена." << std::endl;
             end = true;
             return;
         }
-        
+
+        if (deathElapsedTime >= deathAnimationSpeed) {
+            currentDeathFrame = (currentDeathFrame); 
+            
+            sprite.setTexture(dieTextures[currentDeathFrame]); 
+            sprite.setTextureRect(sf::IntRect(50, 30, 305, 290));
+             
+            flyingDeath = true;
+            deathElapsedTime = 0.f; 
+            currentDeathFrame += 1;    
+        }
     } else {
         elapsedTime += deltaTime;
 
@@ -187,12 +183,4 @@ void Entity::showEnergyIncreaseMessage() {
 
     messageText.setPosition(130.f, 100.f);
     showMessage = true;
-}
-
-void Entity::resetState() {
-    isAlive = true;                     // Устанавливаем состояние живым
-    currentFrame = 0;                   // Сбрасываем текущий кадр анимации
-    elapsedTime = 0.f;                  // Сбрасываем время анимации
-    currentDeathFrame = 0;              // Сбрасываем текущий кадр анимации смерти
-    deathElapsedTime = 0.f;              // Сбрасываем время анимации смерти
 }

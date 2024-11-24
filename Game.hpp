@@ -14,7 +14,6 @@ public:
     void run();
     void processEvents();
     void update();
-    void restart();
 
     void triggerExplosion(sf::Vector2f position);
 

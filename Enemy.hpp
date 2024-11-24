@@ -21,8 +21,6 @@ public:
 
     bool checkCollisionWithPlayer(const Bullet& bullet, const Entity& player) const;
 
-    void resetState();
-
 private:
     sf::Sprite sprite; // Спрайт для отображения противника
 
