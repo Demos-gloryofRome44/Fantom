@@ -11,16 +11,19 @@
 class Game {
 public:
     Game();
-    bool run();
+    void run();
     void processEvents();
     void update();
     void restart();
 
     void triggerExplosion(sf::Vector2f position);
 
+    bool isGameOver = false;
+
+
 private:
     sf::RenderWindow window;
-    
+
     Entity player;
 
     bool movingUp;// движение игрока в зависимости прожатой кнопки
@@ -35,8 +38,6 @@ private:
     sf::Clock gameClock; 
 
     const float speed = 0.05f; // Увеличиваем скорость
-
-    bool isGameOver = false;
 
     std::vector<Map> maps; // Вектор для хранения разных карт
     int currentMapIndex = 0; // Индекс текущей карты

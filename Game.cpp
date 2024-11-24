@@ -199,17 +199,20 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
     energyBar.setPosition(10.f, 10.f); // Позиция такая же, как у фона
 }
 
-bool Game::run() {
+void Game::run() {
     while (window.isOpen()) {
         if (isGameOver == true) {
             Menu menu;
             int result = menu.restartMenu(window);
             if (result == 2) { // Если выбрана опция выхода
-                return false;
+                isGameOver = true;
+                return;
             }
-            restart();
+            isGameOver = false;
+            return;
         }
         processEvents();
+        if (isGameOver == true) { return;}
         update();
 
         window.clear();
@@ -230,14 +233,13 @@ bool Game::run() {
 
         window.display();
     }
-    return true;
 }
 
 void Game::processEvents() {
     //window.setKeyboardFocus(true);
     window.setActive(true); 
 
-    if (!right){
+    if (!right) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -255,8 +257,9 @@ void Game::processEvents() {
                     triggerExplosion(player.getPosition()); // Вызываем взрыв на позиции игрока
                     std::cout << "tab pressed" << std::endl;
                     lastExplosionTime = 0.0f;
-                }
+            }
         }
+        if (event.type == sf::Event::Closed) { isGameOver = true; }
 
         if (event.type == sf::Event::KeyReleased) {
             if (event.key.code == sf::Keyboard::W) movingUp = false;

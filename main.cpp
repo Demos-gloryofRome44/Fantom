@@ -20,8 +20,22 @@ int main() {
 
     Menu menu; 
     menu.show(window);
-    Game game;
-    game.run();
+
+    std::unique_ptr<Game> game = std::make_unique<Game>(); // Используем уникальный указатель
+
+    while (true) {
+        game->run();
+
+        if (!game->isGameOver) {
+            game = std::make_unique<Game>(); // Создаем новый экземпляр Game
+        } else {
+            break;
+        }
+
+        window.clear();
+        // Отрисовка элементов здесь
+        window.display();
+    }
 
     return 0;
 }

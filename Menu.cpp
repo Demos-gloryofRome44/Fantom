@@ -38,12 +38,6 @@ void Menu::show(sf::RenderWindow& window) {
     while (true) {
         window.clear();
 
-        window.draw(backgroundSprite);
-        window.draw(title);
-        window.draw(startButton);
-        window.draw(settingsButton);
-        window.display();
-
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -64,7 +58,27 @@ void Menu::show(sf::RenderWindow& window) {
                     }
                 }
             }
+
+            if (event.type == sf::Event::MouseMoved) {
+                if (startButton.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
+                    startButton.setFillColor(sf::Color(255, 0, 0)); 
+                } else {
+                    startButton.setFillColor(sf::Color::Black); 
+                }
+
+                if (settingsButton.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
+                    settingsButton.setFillColor(sf::Color(255, 0, 0)); 
+                } else {
+                    settingsButton.setFillColor(sf::Color::Black); 
+                }
+            }
         }
+
+        window.draw(backgroundSprite);
+        window.draw(title);
+        window.draw(startButton);
+        window.draw(settingsButton);
+        window.display();
     }
 }
 
@@ -79,12 +93,12 @@ int Menu::restartMenu(sf::RenderWindow& window) {
     newGameButton.setFont(font);
     newGameButton.setString("New Game");
     newGameButton.setCharacterSize(30);
-    newGameButton.setPosition(200, 200); 
+    newGameButton.setPosition(190, 100); 
 
     exitButton.setFont(font);
     exitButton.setString("Exit");
     exitButton.setCharacterSize(30);
-    exitButton.setPosition(200, 150); 
+    exitButton.setPosition(237, 150); 
 
     while (true) {
         
@@ -102,11 +116,27 @@ int Menu::restartMenu(sf::RenderWindow& window) {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     if (newGameButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                        window.clear();
                         return 1; 
                     } else if (exitButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                         window.close(); 
                         return 2; 
                     }
+                }
+            }
+
+            // Подсветка кнопок при наведении курсора
+            if (event.type == sf::Event::MouseMoved) {
+                if (newGameButton.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
+                    newGameButton.setFillColor(sf::Color(255, 0, 0));
+                } else {
+                    newGameButton.setFillColor(sf::Color::White); 
+                }
+
+                if (exitButton.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
+                    exitButton.setFillColor(sf::Color(255, 0, 0)); 
+                } else {
+                    exitButton.setFillColor(sf::Color::White); 
                 }
             }
         }
