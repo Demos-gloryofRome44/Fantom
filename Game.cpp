@@ -188,15 +188,26 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                );
 
 
-               // Инициализация фона полоски энергии
+    // Инициализация фона полоски энергии
     energyBarBackground.setSize(sf::Vector2f(80.f, 10.f));
     energyBarBackground.setFillColor(sf::Color(50, 50, 50)); 
     energyBarBackground.setPosition(10.f, 10.f); // Позиция в левом верхнем углу
 
     // Инициализация самой полоски энергии
     energyBar.setSize(sf::Vector2f(80.f, 10.f)); // Размер полоски
-    energyBar.setFillColor(sf::Color(128, 0, 128)); // Цвет полоски (зеленый)
+    energyBar.setFillColor(sf::Color(128, 0, 128)); 
     energyBar.setPosition(10.f, 10.f); // Позиция такая же, как у фона
+
+    // инициализация таймера
+    if (!font.loadFromFile("assets/DsStamper.ttf")) {
+        std::cerr << "Ошибка загрузки шрифта" << std::endl;
+    }
+
+    // Настройка текста
+    timeText.setFont(font);
+    timeText.setCharacterSize(24); 
+    timeText.setFillColor(sf::Color(128, 0, 128)); 
+    timeText.setPosition(10.f, 22.f);
 }
 
 void Game::run() {
@@ -231,6 +242,8 @@ void Game::run() {
             explosion.draw(window); // Рисуем все взрывы
         }
 
+        window.draw(timeText);
+
         window.display();
     }
 }
@@ -239,7 +252,7 @@ void Game::processEvents() {
     //window.setKeyboardFocus(true);
     window.setActive(true); 
 
-    if (!right) {
+    if (true) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -274,6 +287,8 @@ void Game::processEvents() {
 void Game::update() {
     float deltaTime = gameClock.restart().asSeconds(); // Получаем время с последнего кадра
     lastExplosionTime += deltaTime;
+    totalTime += deltaTime;    
+    timeText.setString(std::to_string(static_cast<int>(totalTime)));
 
     if (movingUp && player.currentEnergy > 0) {
         player.move(0.f, -speed, maps[currentMapIndex]);
@@ -337,11 +352,17 @@ void Game::update() {
     }
 
     if (maps[currentMapIndex].isExitTile(player.getPosition())) { 
+        totalCrystel += maps[currentMapIndex].visitedCrystals.size();
+
+        if (currentMapIndex == maps.size() - 1) { // Check if it's the last map
+            Menu endmenu;
+            endmenu.displayResults(window, totalTime, totalCrystel);
+            return; // Exit update loop
+        }
         currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
         player.setPosition(50.f, 150.f); // Сброс позиции игрока в новой карте
         player.doorActivation = false;
     } 
-
 }
 
 void Game::restart() {

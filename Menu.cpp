@@ -41,16 +41,15 @@ void Menu::show(sf::RenderWindow& window) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                window.close(); // Закрытие окна при нажатии на крестик
+                window.close(); 
                 return; 
             }
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    // Проверка нажатия кнопки "Start Game"
                     if (startButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                         std::cout << "Начало игры..." << std::endl;
-                        window.close(); // Закрытие окна при нажатии на "Start Game"
+                        window.close(); 
                         return; 
                     }
                     else if (settingsButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
@@ -83,13 +82,11 @@ void Menu::show(sf::RenderWindow& window) {
 }
 
 int Menu::restartMenu(sf::RenderWindow& window) {
-    // Загрузка шрифта
     if (!font.loadFromFile("assets/DsStamper.ttf")) {
         std::cerr << "Ошибка загрузки шрифта" << std::endl;
         return -1;
     }
 
-    // Настройка кнопок
     newGameButton.setFont(font);
     newGameButton.setString("New Game");
     newGameButton.setCharacterSize(30);
@@ -137,6 +134,87 @@ int Menu::restartMenu(sf::RenderWindow& window) {
                     exitButton.setFillColor(sf::Color(255, 0, 0)); 
                 } else {
                     exitButton.setFillColor(sf::Color::White); 
+                }
+            }
+        }
+    }
+}
+
+void Menu::displayResults(sf::RenderWindow& window, float time, int crystals) {
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite; 
+
+    if (!font.loadFromFile("assets/DsStamper.ttf")) {
+        std::cerr << "Ошибка загрузки шрифта" << std::endl;
+        return;
+    }
+
+    if (!backgroundTexture.loadFromFile("assets/labs/Background/titre.jpg")) {
+        std::cerr << "Ошибка загрузки текстуры фона." << std::endl;
+    }
+
+    backgroundSprite.setTexture(backgroundTexture); 
+
+    backgroundSprite.setScale(
+        static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x,
+        static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y
+    );
+
+    std::string resultText = "Your stat: \n";
+    resultText += "Total Time: " + std::to_string(time) + " seconds\n";
+    resultText += "Collected Crystals: ";
+
+    sf::Texture crystalTexture;
+    if (!crystalTexture.loadFromFile("assets/labs/diamond.png")) {
+        std::cerr << "Ошибка загрузки текстуры кристалла" << std::endl;
+        return;
+    }
+
+    sf::Sprite crystalSprite(crystalTexture);
+    crystalSprite.setScale(1.f, 1.f); 
+    crystalSprite.setPosition(345, 140); 
+
+    sf::Text text;
+    text.setString(resultText + std::to_string(crystals)); 
+    text.setCharacterSize(24);
+    text.setFont(font); 
+    text.setFillColor(sf::Color::Black);
+    text.setPosition(80, 80); 
+
+    sf::Text newGameButton;
+    newGameButton.setFont(font);
+    newGameButton.setString("New Game");
+    newGameButton.setCharacterSize(30);
+    newGameButton.setFillColor(sf::Color::Black);
+    newGameButton.setPosition(170, 200); 
+
+    while (window.isOpen()) {
+        window.clear();
+        window.draw(backgroundSprite);
+        window.draw(text);
+        window.draw(crystalSprite); 
+        window.draw(newGameButton); 
+        window.display();
+
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (newGameButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                        window.close();
+                        return;
+                    }
+                }
+            }
+
+            if (event.type == sf::Event::MouseMoved) {
+                if (newGameButton.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
+                    newGameButton.setFillColor(sf::Color(255, 0, 0)); 
+                } else {
+                    newGameButton.setFillColor(sf::Color::Black);
                 }
             }
         }

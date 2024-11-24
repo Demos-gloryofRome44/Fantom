@@ -45,10 +45,13 @@ private:
     std::vector<Explosion> explosions;
     float explosionCooldown = 1.0f; // Время между взрывами (в секундах)
     float lastExplosionTime = 0.0f; // Время последнего взрыва
+    float totalTime = 0.0f;
+    int totalCrystel = 0;
 
     // Полоска энергии
     sf::RectangleShape energyBarBackground; 
     sf::RectangleShape energyBar; 
-
+    sf::Font font; // Шрифт для кнопок
+    sf::Text timeText; // Кнопка "Новая игра"
 };
 #endif // GAME_H

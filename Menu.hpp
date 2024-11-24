@@ -10,6 +10,8 @@ public:
     void show(sf::RenderWindow& window);
     int restartMenu(sf::RenderWindow& window); // Метод для перезапуска игры
 
+    void displayResults(sf::RenderWindow& window, float time, int crystals);
+
 private:
     sf::Font font; // Шрифт для кнопок
     sf::Text newGameButton; // Кнопка "Новая игра"
