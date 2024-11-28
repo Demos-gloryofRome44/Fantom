@@ -4,6 +4,7 @@
 #include <string>
 #include <filesystem>
 #include <iostream>
+#include <fstream>
 #include "Menu.hpp"
 
 // Функция для загрузки текстур из директории
@@ -28,6 +29,61 @@ std::vector<std::string> loadTexturesFromDirectory(const std::string& directory)
 
     return textureFiles; // Возвращаем список загруженных текстур
 }
+std::unordered_map<int, std::string> loadTextures(const std::string& filename) {
+    std::unordered_map<int, std::string> textureFiles;
+    std::ifstream file(filename);
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        int id;
+        std::string path;
+        char delimiter;
+
+        if (iss >> id >> delimiter >> path) {
+            textureFiles[id] = path;
+        }
+    }
+    return textureFiles;
+}
+
+std::vector<std::vector<std::vector<int>>> loadMapsFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<std::vector<std::vector<int>>> allMaps;
+    std::vector<std::vector<int>> currentMap;
+    
+    if (!file.is_open()) {
+        std::cerr << "Could not open the file: " << filename << std::endl;
+        return allMaps; 
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.empty()) {
+            if (!currentMap.empty()) {
+                allMaps.push_back(currentMap);
+                currentMap.clear(); 
+            }
+            continue; 
+        }
+
+        std::istringstream iss(line);
+        std::vector<int> row;
+        int value;
+
+        while (iss >> value) {
+            row.push_back(value);
+        }
+
+        currentMap.push_back(row);
+    }
+
+    if (!currentMap.empty()) {
+        allMaps.push_back(currentMap);
+    }
+
+    return allMaps;
+}
 
 
 Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
@@ -37,159 +93,14 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                window.getSize().x,
                window.getSize().y),
                movingUp(false), movingDown(false), movingLeft(false), movingRight(false) {
+    
+    auto textureFiles = loadTextures("resources/textures.txt");
 
-                std::unordered_map<int, std::string> textureFiles = {
-        {0, "assets/labs/tiles/wallLeft.png"},
-        {1, "assets/labs/tiles/wallCentr.png"},
-        {2, "assets/labs/tiles/wallRight.png"},
-        {3, "assets/labs/tiles/left.png"},
-        {4, "assets/labs/tiles/right.png"},
-        {5, "assets/labs/tiles/leftPlat.png"},
-        {6, "assets/labs/tiles/Plat.png"},
-        {7, "assets/labs/tiles/rightPlat.png"},
-        {8, "assets/labs/tiles/box.png"},
-        {9, "assets/labs/tiles/krest.png"},
-        {10, "assets/labs/tiles/block.png"},
-        {12, "assets/labs/tiles/leftRed.png"},
-        {13, "assets/labs/tiles/red.png"},
-        {14, "assets/labs/tiles/rightRed.png"},
-        {15, "assets/labs/tiles/redLeft.png"},
-        {16, "assets/labs/tiles/redWallLeft.png"},
-        {17, "assets/labs/tiles/redWall.png"},
-        {18, "assets/labs/tiles/redLeft.png"},
+    auto levelData = loadMapsFromFile("resources/levels.txt");
 
-        {11, "assets/labs/animate/Entry.png"},
-        {19, "assets/labs/animate/constDoor.png"},
-
-        {20, "assets/labs/tiles/shaxt.png"},
-        {21, "assets/labs/tiles/redBlock.png"},
-
-        {22, "assets/labs/tilesTown/Tile_01.png"},
-        {23, "assets/labs/tilesTown/Tile_02.png"},
-        {24, "assets/labs/tilesTown/Tile_04.png"},
-        {25, "assets/labs/tilesTown/Tile_10.png"},
-        {26, "assets/labs/tilesTown/Tile_13.png"},
-        {27, "assets/labs/tilesTown/Tile_24.png"},
-        {28, "assets/labs/tilesTown/Tile_12.png"},
-
-
-
-        {40, "assets/labs/tiles/stolb.png"},
-        {41, "assets/labs/tiles/stolb1.png"},
-        {42,"assets/labs/Objects/locker.png"},
-        {43,"assets/labs/Objects/Box1.png"},
-        {44,"assets/labs/Objects/Box2.png"},
-        {45,"assets/labs/Objects/Box8.png"},
-        {46, "assets/labs/tiles/stolbRed.png"},
-
-        {47, "assets/labs/Objects/locker1.png"},
-        {48, "assets/labs/Objects/locker2.png"},
-        {49, "assets/labs/Objects/locker3.png"},
-        {51, "assets/labs/Objects/pointer1.png"},
-        {52, "assets/labs/Objects/barrel1.png"},
-        {53, "assets/labs/Objects/barrel2.png"},
-        {54, "assets/labs/Objects/barrel3.png"},
-        {55, "assets/labs/Objects/board1.png"},
-        {56, "assets/labs/Objects/board2.png"},
-        {57, "assets/labs/Objects/flag.png"},
-        {58, "assets/labs/Objects/fence1.png"},
-        {59, "assets/labs/Objects/fence2.png"},
-        {60, "assets/labs/Objects/fence3.png"},
-
-        {61, "assets/labs/outObjects/trees/3.png"},
-        {62, "assets/labs/outObjects/other/Pointer1.png"},
-        {63, "assets/labs/outObjects/Stones/6.png"},
-        {64, "assets/labs/outObjects/Grass/16.png"},
-        {65, "assets/labs/tiles/white.png"},
-        {66, "assets/labs/outObjects/other/box1.png"},
-        {67, "assets/labs/outObjects/other/box2.png"},
-
-
-        {50, "assets/labs/animate/Screen2.png"},
-
-        {100, "assets/labs/diamond.png"}
-    };
-
-                // 1-уровень
-                maps.emplace_back(textureFiles,
-                    std::vector<std::vector<int>>{
-                   {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
-                   {3, -1, -1, -1, -1, -1, -1, 41, -1, -1, 41, -1, -1, -1, -1, 11}, 
-                   {3, 43, -1, -1, -1, -1, -1, 40, -1,100, 40, -1, -1, -1, -1, 39}, 
-                   {3,  6, -1, -1, -1, -1, -1,  9,  9,  9,  9, -1, -1,  5,  6, 7}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1,  8, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, 42, 4}, 
-                   {3, -1,  8,  8, -1, 10, 50, -1, -1, -1, -1, -1, -1, -1, 42, 4},
-                   {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
-                }
-                );
-
-               // 2-уровень
-               maps.emplace_back(textureFiles,
-                    std::vector<std::vector<int>>{
-                   { 0,  1,  1,  1,  1, 16,  1,  1, 16, 17, 17, 17, 17,  1,  1,  1, 2}, 
-                   {19, -1, -1, -1, -1, 21, -1, 57, 15, -1, -1, -1, -1,  -1, -1, 4}, 
-                   {39, -1, -1, -1, -1, 21,100, -1, 15, -1, -1, -1, -1, -1, -1, 4}, 
-                   { 3, -1, -1, -1, -1, 12, 21, -1, 15, -1, 50, -1, -1, -1, -1, 4}, 
-                   { 3, -1, -1, -1, -1, -1, -1, -1, 12, 13, 13, 13, 14, -1, -1, 4}, 
-                   { 3, -1, -1, -1, -1, -1, -1, -1, 41, -1, -1, -1, 41, -1, -1, 4}, 
-                   { 3, 45, -1, -1, -1, -1, -1, -1, 41, -1, -1, -1, 41, -1, -1, 11}, 
-                   { 3, 42, 48, 47, -1, -1, -1, -1, 41, -1, -1, -1, 41, -1, -1, 39}, 
-                   { 3, 42,  8, 49, -1, -1, -1, 51, 40, -1, 45, -1, 41, -1, -1, 4},
-                   { 6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
-               }
-               );
-
-               // 3-уровень
-               maps.emplace_back(textureFiles,
-                    std::vector<std::vector<int>>{
-                   { 0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
-                   { 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 51, -1,100, 4}, 
-                   { 3, 50, -1, -1, 43, 44, -1, -1, -1, -1, -1, 52, 28, 53, 54, 4}, 
-                   { 3, 13, -1, 16, 17, 17, -1, -1, -1, -1, 28, 28, 28, 28, 28, 4}, 
-                   { 3, -1, -1, 21, -1, -1, -1, -1, -1, -1, 28, -1, -1, -1, -1, 4}, 
-                   {19, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {39, -1, -1, 21, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   { 3,  9, 20, 21, 42, 48, -1, -1, -1, -1, -1, -1, -1, 20, -1, 11}, 
-                   { 3, 20,  9,  6, 42, 43, -1, -1, -1, -1, -1,  8, 20, 20, -1, 39},
-                   { 6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
-               }
-               );
-
-               // 4-уровень
-               maps.emplace_back(textureFiles,
-                    std::vector<std::vector<int>>{
-                   { 0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
-                   { 3, -1, 57, 46, -1, -1, -1, 46, 47, -1, -1, -1, -1, 56, 55, 8}, 
-                   { 3,100, -1, 46, 43, 44, -1, 46, 58, 59, 60, -1, -1, -1, 50, 8}, 
-                   { 3, 13, -1, 46, 13, 13, 13, 46,  9,  9, 13, -1, -1, 13, 13, 8}, 
-                   { 3, -1, -1, 46, -1, -1, -1, 46, -1, -1, -1, -1, -1, -1, -1, 8}, 
-                   {19, -1, -1, 46, -1, -1, -1, 46, -1, -1, -1, -1, -1, -1, 57, 8}, 
-                   {39, -1, -1, 46, -1, -1, -1, 46, -1, -1, -1, -1, -1, -1, -1, 8}, 
-                   { 3,  9, 42, 46, 56, 55, -1, 46, -1, -1, -1, -1, -1, -1, -1, 11}, 
-                   { 3, 20,  9, 46, 44, 43, -1, 46, -1, 52, 45, 45, 45, -1, -1, 39},
-                   { 6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
-               }
-               );
-
-               // 5-уровень
-               maps.emplace_back(textureFiles,
-                    std::vector<std::vector<int>>{
-                   {22, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 24}, 
-                   {25, -1, -1, 65, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26}, 
-                   {25, -1, -1, 65, 43, 44, -1, -1, -1, -1, 28, -1, -1, 64, -1, 26}, 
-                   {25, 13, -1, 65, 28, 28, 28, -1,  9,  9, 13, -1, -1, 13, 13, 26}, 
-                   {25, -1, -1, 65, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26}, 
-                   {19, -1, -1, 65, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 57, 26}, 
-                   {39, -1, -1, 65, -1, -1, 61, -1, -1, -1, -1, -1, 61, -1, -1, 26}, 
-                   {25,  9, 28, 65, 56, 55, -1, -1, -1, -1, -1, -1, -1, -1, -1, 11}, 
-                   {25, 28,  9, 65, 64, 64, -1, -1, -1, 50, 62, 63, -1, -1, -1, 39},
-                   {27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27}
-               }
-               );
-
+    for (const auto& level : levelData) {
+        maps.emplace_back(textureFiles, level);
+    }
 
     // Инициализация фона полоски энергии
     energyBarBackground.setSize(sf::Vector2f(80.f, 10.f));
@@ -227,32 +138,35 @@ void Game::run() {
         }
         processEvents();
         if (isGameOver == true) { return;}
+
         update();
 
-        window.clear();
-        maps[currentMapIndex].draw(window);
-        player.draw(window);
-
-        window.draw(energyBarBackground); // Отрисовка фона полоски энергии
-        window.draw(energyBar);
-        
-        if (player.showMessage) {
-            window.draw(player.messageText); // Отрисовка текстового сообщения
-        }
-        
-
-        for (auto& explosion : explosions) {
-            explosion.draw(window); // Рисуем все взрывы
-        }
-
-        window.draw(timeText);
-
-        window.display();
+        draw();
     }
 }
 
+void Game::draw() {
+    window.clear();
+    maps[currentMapIndex].draw(window);
+    player.draw(window);
+
+    window.draw(energyBarBackground); // Отрисовка фона полоски энергии
+    window.draw(energyBar);
+    
+    if (player.showMessage) {
+        window.draw(player.messageText); // Отрисовка таймера
+    }
+
+    for (auto& explosion : explosions) {
+        explosion.draw(window); // Рисуем все взрывы
+    }
+
+    window.draw(timeText);
+
+    window.display();
+}
+
 void Game::processEvents() {
-    //window.setKeyboardFocus(true);
     window.setActive(true); 
 
     if (true) {
@@ -370,8 +284,8 @@ void Game::update() {
 
 void Game::triggerExplosion(sf::Vector2f position) {
     if (turn) {
-        explosions.emplace_back(position.x + 12, position.y + 12); // Создаем новый взрыв
+        explosions.emplace_back(position.x + 12, position.y + 12); 
     } else {
-        explosions.emplace_back(position.x - 12, position.y + 12); // Создаем новый взрыв
+        explosions.emplace_back(position.x - 12, position.y + 12); 
     }
 }

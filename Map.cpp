@@ -8,7 +8,7 @@ Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::ve
         }
         textures[pair.first] = texture; // Сохраняем текстуру по ключу
     }
-    // Загрузка текстуры фона
+    
     if (!backgroundTexture.loadFromFile("assets/labs/Background/Background.png")) {
         std::cerr << "Ошибка загрузки текстуры фона." << std::endl;
     }

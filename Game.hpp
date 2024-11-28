@@ -6,12 +6,17 @@
 #include "Entity.hpp"
 #include "Map.hpp"
 #include "Explosion.hpp"
+#include <memory>
+#include <thread>
+#include <mutex>
 
 
 class Game {
 public:
     Game();
     void run();
+
+    void draw();
     void processEvents();
     void update();
 
@@ -52,5 +57,8 @@ private:
     sf::RectangleShape energyBar; 
     sf::Font font; // Шрифт для кнопок
     sf::Text timeText; // Кнопка "Новая игра"
+
+    std::mutex mtx; // Мьютекс для синхронизации
+
 };
 #endif // GAME_H
