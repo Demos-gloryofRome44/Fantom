@@ -12,7 +12,7 @@ void Menu::show(sf::RenderWindow& window) {
         return;
     } 
 
-     if (!backgroundTexture.loadFromFile("assets/back.png")) {
+     if (!backgroundTexture.loadFromFile("assets/image.jpg")) {
         std::cerr << "Ошибка загрузки текстуры фона." << std::endl;
     }
 

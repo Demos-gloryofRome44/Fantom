@@ -96,21 +96,22 @@ Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
     
     auto textureFiles = loadTextures("resources/textures.txt");
 
-    auto levelData = loadMapsFromFile("resources/levels.txt");
+    auto mapsData = loadMapsFromFile("resources/levels.txt");
 
-    for (const auto& level : levelData) {
-        maps.emplace_back(textureFiles, level);
+    int curentMap = 0;
+    for (const auto& level : mapsData) {
+        maps.emplace_back(textureFiles, level, curentMap);
+        curentMap++;
     }
 
     // Инициализация фона полоски энергии
     energyBarBackground.setSize(sf::Vector2f(80.f, 10.f));
     energyBarBackground.setFillColor(sf::Color(50, 50, 50)); 
-    energyBarBackground.setPosition(10.f, 10.f); // Позиция в левом верхнем углу
-
+    energyBarBackground.setPosition(10.f, 10.f); 
     // Инициализация самой полоски энергии
-    energyBar.setSize(sf::Vector2f(80.f, 10.f)); // Размер полоски
+    energyBar.setSize(sf::Vector2f(80.f, 10.f)); 
     energyBar.setFillColor(sf::Color(128, 0, 128)); 
-    energyBar.setPosition(10.f, 10.f); // Позиция такая же, как у фона
+    energyBar.setPosition(10.f, 10.f); 
 
     // инициализация таймера
     if (!font.loadFromFile("assets/DsStamper.ttf")) {

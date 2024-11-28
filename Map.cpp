@@ -1,6 +1,7 @@
 #include "Map.hpp"
 
-Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::vector<std::vector<int>>& mapData) {
+Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::vector<std::vector<int>>& mapData, 
+      int currentMap) {
     for (const auto& pair : textureFiles) {
         sf::Texture texture;
         if (!texture.loadFromFile(pair.second)) { // Используем путь из unordered_map
@@ -18,8 +19,10 @@ Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::ve
 
     enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 
     "assets/enemy/Soldier_1/Dead.png", 370.f, 219.f, 25.f, 1.f, 14); 
+    if (currentMap >= 4) {
     enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_2/Shot_2.png", 
     "assets/enemy/Soldier_2/Dead.png", 320.f, 219.f, 35.f, 0.8f, 22); 
+    }
 }
 
 // Метод для отрисовки карты

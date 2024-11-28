@@ -13,7 +13,8 @@ class Explosion;
 class Map {
 public:
     // Конструктор, который загружает текстуры и устанавливает карту
-    Map(const std::unordered_map<int, std::string>& textureFiles, const std::vector<std::vector<int>>& mapData);
+    Map(const std::unordered_map<int, std::string>& textureFiles, const std::vector<std::vector<int>>& mapData, 
+    int currentMap);
 
     // Метод для отрисовки карты
     void draw(sf::RenderWindow& window);
