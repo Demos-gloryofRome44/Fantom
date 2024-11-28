@@ -4,10 +4,10 @@
 #include <iostream>
 
 Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFile, const std::string& deathTextureFile,
-        float posX, float posY, float width, float height)
+        float posX, float posY, float speedEnemy, float rechargeTime, int yShootEnemy)
     : currentFrame(0), attackFrame(0), deathFrame(0), animationSpeed(0.2f), attackAnimationSpeed(0.2f), deathAnimationSpeed(0.3f),
-    elapsedTime(0.f), attackElapsedTime(0.f), deathElapsedTime(0.f), 
-      speed(25.f), lastShotTime(0.f), shootCooldown(1.f), movingRight(false) {
+    elapsedTime(0.f), attackElapsedTime(0.f), deathElapsedTime(0.f), yShoot(yShootEnemy),
+      speed(speedEnemy), lastShotTime(0.f), shootCooldown(rechargeTime), movingRight(false) {
     
     if (!texture.loadFromFile(textureFile)) {
         std::cerr << "Ошибка загрузки текстуры из " << textureFile << std::endl;
@@ -82,7 +82,7 @@ void Enemy::deathAnimation(float deltaTime){
     if (deathElapsedTime >= deathAnimationSpeed) {
         deathFrame = (deathFrame) % 4; 
 
-        int frameWidth = 71 + 46; 
+        int frameWidth = 71 + 40; 
         int frameHeight = 61; 
 
         sprite.setTexture(deathTexture);
@@ -199,10 +199,10 @@ void Enemy::draw(sf::RenderWindow& window) {
 
 void Enemy::shoot(const Entity& player) {
     if (movingRight){
-        bullets.emplace_back(position.x + sprite.getGlobalBounds().width, position.y + 14,
+        bullets.emplace_back(position.x + sprite.getGlobalBounds().width, position.y + yShoot,
    player.getPosition()); 
     } else {
-        bullets.emplace_back(position.x - sprite.getGlobalBounds().width, position.y + 14,
+        bullets.emplace_back(position.x - sprite.getGlobalBounds().width, position.y + yShoot,
    player.getPosition()); 
     }
 }

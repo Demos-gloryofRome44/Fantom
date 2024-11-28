@@ -14,7 +14,7 @@ class Bullet;
 class Enemy {
 public:
     Enemy(const std::string& textureFile, const std::string& AttackTextureFile, const std::string& deathTextureFile,
-    float posX, float posY, float width, float height);
+    float posX, float posY, float width, float height, int yShootEnemy);
     
     void update(float deltaTime, const Map& map, Entity &player, const std::vector<Explosion>& explosions);
     void draw(sf::RenderWindow& window);
@@ -68,6 +68,8 @@ private:
     bool flag = true;
 
     bool isAllive = true;
+
+    int yShoot = 0;
 };
 
 #endif // ENEMY_HPP
