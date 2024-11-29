@@ -1,10 +1,10 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "Entity.hpp"
-#include "Map.hpp"
-#include "Game.hpp"
-#include "Menu.hpp"
+#include "include/Entity.hpp"
+#include "include/Map.hpp"
+#include "include/Game.hpp"
+#include "include/Menu.hpp"
 
 int main() {
     std::cout<<"New Game start123"<< std::endl;

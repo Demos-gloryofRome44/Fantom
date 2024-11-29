@@ -1,5 +1,5 @@
-#include "Entity.hpp"
-#include "Map.hpp"
+#include "include/Entity.hpp"
+#include "include/Map.hpp"
 
 Entity::Entity(const std::vector<std::string>& textureFiles, const std::vector<std::string>& dieTexturesFile,
  float posX, float posY, float width, float height)

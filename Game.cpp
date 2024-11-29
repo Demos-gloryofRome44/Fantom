@@ -1,11 +1,11 @@
-#include "Game.hpp"
+#include "include/Game.hpp"
 #include <filesystem>
 #include <vector>
 #include <string>
 #include <filesystem>
 #include <iostream>
 #include <fstream>
-#include "Menu.hpp"
+#include "include/Menu.hpp"
 
 // Функция для загрузки текстур из директории
 std::vector<std::string> loadTexturesFromDirectory(const std::string& directory) {

@@ -1,4 +1,4 @@
-#include "Menu.hpp"
+#include "include/Menu.hpp"
 
 void Menu::show(sf::RenderWindow& window) {
     sf::Font font;

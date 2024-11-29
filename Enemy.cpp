@@ -1,6 +1,6 @@
-#include "Enemy.hpp"
-#include "Map.hpp"
-#include "Entity.hpp"
+#include "include/Enemy.hpp"
+#include "include/Map.hpp"
+#include "include/Entity.hpp"
 #include <iostream>
 
 Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFile, const std::string& deathTextureFile,
