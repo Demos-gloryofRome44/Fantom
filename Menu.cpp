@@ -24,16 +24,14 @@ void Menu::show(sf::RenderWindow& window) {
     );
     
 
-    sf::Text title("Fantom \n Dark Entity", font, 50);
-    title.setPosition(470, 140);
+    sf::Text title("Fantom\n             Dark Entity", font, 30);
+    title.setPosition(80, 30);
 
-    sf::Text startButton("Start Game", font, 30);
-    startButton.setPosition(520, 310);
-    startButton.setFillColor(sf::Color::Black);
+    sf::Text startButton("Start Game", font, 20);
+    startButton.setPosition(210, 160);
 
-    sf::Text settingsButton("Settings", font, 30);
-    settingsButton.setPosition(520, 350);
-    settingsButton.setFillColor(sf::Color::Black);
+    sf::Text settingsButton("Settings", font, 20);
+    settingsButton.setPosition(210, 190);
 
     while (true) {
         window.clear();
@@ -62,13 +60,13 @@ void Menu::show(sf::RenderWindow& window) {
                 if (startButton.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
                     startButton.setFillColor(sf::Color(255, 0, 0)); 
                 } else {
-                    startButton.setFillColor(sf::Color::Black); 
+                    startButton.setFillColor(sf::Color::White); 
                 }
 
                 if (settingsButton.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
                     settingsButton.setFillColor(sf::Color(255, 0, 0)); 
                 } else {
-                    settingsButton.setFillColor(sf::Color::Black); 
+                    settingsButton.setFillColor(sf::Color::White); 
                 }
             }
         }

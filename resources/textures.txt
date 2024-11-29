@@ -9,7 +9,10 @@
 8:assets/labs/tiles/box.png
 9:assets/labs/tiles/krest.png
 10:assets/labs/tiles/block.png
+
 11:assets/labs/animate/Entry.png
+29:assets/labs/animate/Entry.png
+
 12:assets/labs/tiles/leftRed.png
 13:assets/labs/tiles/red.png
 14:assets/labs/tiles/rightRed.png
@@ -27,6 +30,9 @@
 26:assets/labs/tilesTown/Tile_13.png
 27:assets/labs/tilesTown/Tile_24.png
 28:assets/labs/tilesTown/Tile_12.png
+30:assets/labs/tilesTown/Tile_19.png
+31:assets/labs/tilesTown/Tile_20.png
+32:assets/labs/tilesTown/Tile_22.png
 
 #текстуры фона 
 40:assets/labs/tiles/stolb.png
@@ -59,5 +65,9 @@
 65:assets/labs/tiles/white.png
 66:assets/labs/outObjects/other/box1.png
 67:assets/labs/outObjects/other/box2.png
+68:assets/labs/outObjects/trees/5.png
+69:assets/labs/outObjects/trees/6.png
+70:assets/labs/outObjects/Grass/15.png
+71:assets/labs/outObjects/trees/5_2.png
 
 100:assets/labs/diamond.png #кристал

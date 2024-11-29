@@ -97,17 +97,23 @@ void Enemy::deathAnimation(float deltaTime){
 void Enemy::move(float deltaX, float deltaY, const Map& map) {
     size_t newX;
     if (movingRight) {
-        newX = static_cast<size_t>(((position.x + deltaX + 35.f) / tileSize));
+        newX = static_cast<size_t>(((position.x + deltaX + 40.f) / tileSize));
     } else {
-        newX = static_cast<size_t>(((position.x + deltaX - 35.f) / tileSize));
+        newX = static_cast<size_t>(((position.x - deltaX - 40.f) / tileSize));
     }
 
-    size_t newY = static_cast<size_t>((position.y + deltaY + 40.f) / tileSize);
+    size_t newY1 = static_cast<size_t>((position.y + deltaY + 40.f) / tileSize);
+    size_t newY2 = static_cast<size_t>((position.y + deltaY + 10.f) / tileSize);
+
+    size_t underY = static_cast<size_t>((position.y + 80.f) / tileSize);
 
     // Проверка типа тайла
-    int tileType = map.getTileType(newX, newY);
+    int tileType1 = map.getTileType(newX, newY1);
+    int tileType2 = map.getTileType(newX, underY);
+    int tileType3 = map.getTileType(newX, newY2);
     
-    if (tileType == -1 || tileType >= 40) { 
+    if ((tileType1 == -1 || tileType1 >= 40) && (tileType2 != -1 && tileType2 < 40) && 
+    (tileType3 == -1 || tileType3 >= 40)) {  
         position.x += deltaX;
         position.y += deltaY;
         sprite.setPosition(position); 

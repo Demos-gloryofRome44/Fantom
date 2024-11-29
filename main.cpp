@@ -9,14 +9,14 @@
 int main() {
     std::cout<<"New Game start123"<< std::endl;
 
-    sf::RenderWindow window(sf::VideoMode(1200, 700), "Main Menu");
+    sf::RenderWindow window(sf::VideoMode(512, 320), "Main Menu");
     sf::Music backgroundMusic; 
 
     if (!backgroundMusic.openFromFile("assets/song18.mp3")) { 
         std::cerr << "Ошибка загрузки музыки!" << std::endl;
     }
-    backgroundMusic.setLoop(true); 
-    backgroundMusic.play();
+    //backgroundMusic.setLoop(true); 
+    //backgroundMusic.play();
 
     Menu menu; 
     menu.show(window);

@@ -66,6 +66,9 @@ std::vector<std::vector<std::vector<int>>> loadMapsFromFile(const std::string& f
             }
             continue; 
         }
+        if (line[0] == '#') {
+            continue; 
+        }
 
         std::istringstream iss(line);
         std::vector<int> row;
@@ -170,7 +173,7 @@ void Game::draw() {
 void Game::processEvents() {
     window.setActive(true); 
 
-    if (!right) {
+    if (true) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -272,15 +275,32 @@ void Game::update() {
     if (maps[currentMapIndex].isExitTile(player.getPosition())) { 
         totalCrystel += maps[currentMapIndex].visitedCrystals.size();
 
-        if (currentMapIndex == maps.size() - 1) { // Check if it's the last map
+        if (currentMapIndex == maps.size() - 1) { 
             Menu endmenu;
             endmenu.displayResults(window, totalTime, totalCrystel);
-            return; // Exit update loop
+            return; 
         }
-        currentMapIndex = (currentMapIndex + 1) % maps.size(); // Переход к следующей карте
+        if (currentMapIndex == 6) {
+            currentMapIndex = (currentMapIndex + 2) % maps.size(); // Переход к следующей карте
+        } else { currentMapIndex = (currentMapIndex + 1) % maps.size(); }
         player.setPosition(50.f, 150.f); // Сброс позиции игрока в новой карте
         player.doorActivation = false;
     } 
+
+    if (maps[currentMapIndex].isExitTileEnd(player.getPosition())) { 
+        totalCrystel += maps[currentMapIndex].visitedCrystals.size();
+
+        if (currentMapIndex == 6) {
+            currentMapIndex = currentMapIndex + 1;
+            player.setPosition(50.f, 150.f); // Сброс позиции игрока в новой карте
+        } else {
+            currentMapIndex = currentMapIndex - 1;
+            player.setPosition(450.f, 70.f); // Сброс позиции игрока в новой карте
+        }
+
+        player.doorActivation = false;
+    } 
+
 }
 
 void Game::triggerExplosion(sf::Vector2f position) {

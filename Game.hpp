@@ -60,5 +60,8 @@ private:
 
     std::mutex mtx; // Мьютекс для синхронизации
 
+    int previousMapIndex;
+
+
 };
 #endif // GAME_H

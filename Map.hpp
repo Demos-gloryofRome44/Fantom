@@ -28,9 +28,8 @@ public:
 
     void updateEnemies(float deltaTime, Entity &player, const std::vector<Explosion>& explosions); // Новый метод для обновления противников
 
-    void reset();
-
     bool isExitTile(const sf::Vector2f& position) const;
+    bool isExitTileEnd(const sf::Vector2f& position) const;
 
     void update(float deltaTime);
     bool doorActivation = false;

@@ -94,7 +94,7 @@ bool Entity::checkCollision(Map& map) {
                 }
             }
 
-            if (tileType == 11 && doorActivation) {
+            if ((tileType == 11 || tileType == 29) && doorActivation) {
                 sf::FloatRect back = map.getTileBounds(x, y - 1);
                 if (playerBounds.intersects(tileBounds)) {
                     return false; // Столкновение обнаружено

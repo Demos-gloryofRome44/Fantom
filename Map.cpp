@@ -17,11 +17,29 @@ Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::ve
     // Установка карты
     map = mapData;
 
+    if (currentMap == 6) {
+        return;
+    }
+    if (currentMap == 8) {
+         enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 
+        "assets/enemy/Soldier_1/Dead.png", 200.f, 123.f, 11.f, 0.5f, 10); 
+        return;
+    }
     enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 
-    "assets/enemy/Soldier_1/Dead.png", 370.f, 219.f, 25.f, 1.f, 14); 
+    "assets/enemy/Soldier_1/Dead.png", 390.f, 219.f, 25.f, 1.f, 14); 
     if (currentMap >= 4) {
-    enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_2/Shot_2.png", 
-    "assets/enemy/Soldier_2/Dead.png", 320.f, 219.f, 35.f, 0.8f, 22); 
+        enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_2/Shot_2.png", 
+        "assets/enemy/Soldier_2/Dead.png", 300.f, 219.f, 35.f, 0.8f, 22); 
+    }
+    if (currentMap == 7) {
+        enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_2/Shot_2.png", 
+        "assets/enemy/Soldier_2/Dead.png", 270.f, 219.f, 35.f, 0.8f, 22); 
+        
+        enemies.emplace_back("assets/enemy/Soldier_1/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 
+        "assets/enemy/Soldier_1/Dead.png", 200.f, 219.f, 25.f, 1.f, 14); 
+
+        enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_2/Shot_1.png", 
+        "assets/enemy/Soldier_2/Dead.png", 440.f, 58.f, 25.f, 0.6f, 22); 
     }
 }
 
@@ -37,14 +55,14 @@ void Map::draw(sf::RenderWindow& window) {
             if (tileType == -1) {
                 continue; // Игнорируем фон
             }
-            if (textures.find(tileType) != textures.end() && tileType != 11 && tileType != 100) { 
+            if (textures.find(tileType) != textures.end() && tileType != 11 && tileType != 100 && tileType != 29) { 
                 sf::Sprite sprite;
                 sprite.setTexture(textures[tileType]); // Получаем текстуру по индексу
                 sprite.setPosition(x * tileSize, y * tileSize); 
                 window.draw(sprite); 
             }
 
-            if (tileType == 11) { 
+            if (tileType == 11 || tileType == 29) { 
                 sf::Sprite doorSprite;
                 doorSprite.setTexture(textures[tileType]); // Получаем текстуру двери
                 doorSprite.setTextureRect(sf::IntRect(32 * currentDoorFrame, 0, 32, 64)); // Устанавливаем текущий кадр анимации
@@ -86,6 +104,23 @@ bool Map::isExitTile(const sf::Vector2f& position) const {
     return false; // Игрок не на тайле выхода
 }
 
+bool Map::isExitTileEnd(const sf::Vector2f& position) const {
+    for (size_t y = 0; y < map.size(); ++y) {
+        for (size_t x = 0; x < map[y].size(); ++x) {
+            if (map[y][x] == 29) { 
+                sf::FloatRect tileBounds = getTileBounds(x, y);
+                sf::FloatRect back = getTileBounds(x, y - 1);
+
+                if (tileBounds.contains(position) || back.contains(position)) {
+                    return true; // Игрок находится на тайле выхода
+                }
+            }
+        }
+    }
+    
+    return false; // Игрок не на тайле выхода
+}
+
 sf::FloatRect Map::getTileBounds(size_t x, size_t y) const {
     return sf::FloatRect(x * tileSize, y * tileSize, tileSize, tileSize);
 }
@@ -103,7 +138,7 @@ void Map::update(float deltaTime) {
     for (size_t y = 0; y < map.size(); ++y) {
         for (size_t x = 0; x < map[y].size(); ++x) {
             int tileType = map[y][x];
-            if (tileType == 11) { // Проверяем, является ли тайл дверью
+            if (tileType == 11 || tileType == 29) { // Проверяем, является ли тайл дверью
                 doorAnimationTime += deltaTime; // Увеличиваем время анимации
                 if (doorAnimationTime >= doorFrameDuration) {
                     currentDoorFrame++; // Переход к следующему кадру анимации
@@ -116,21 +151,4 @@ void Map::update(float deltaTime) {
         }
     }
     }
-}
-    
-
-
-void Map::reset() {
-    map = {
-                   {0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 2}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1, -1,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4}, 
-                   {3, -1,  6,  6, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4},
-                   {6,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 6}
-    };
 }
