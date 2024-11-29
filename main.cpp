@@ -15,8 +15,8 @@ int main() {
     if (!backgroundMusic.openFromFile("assets/song18.mp3")) { 
         std::cerr << "Ошибка загрузки музыки!" << std::endl;
     }
-    //backgroundMusic.setLoop(true); 
-    //backgroundMusic.play();
+    backgroundMusic.setLoop(true); 
+    backgroundMusic.play();
 
     Menu menu; 
     menu.show(window);
