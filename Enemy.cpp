@@ -49,19 +49,18 @@ void Enemy::attackAnimate(float deltaTime) {
     attackElapsedTime += deltaTime;
 
     if (attackFrame == 0) {
-        sprite.setTexture(attackTexture); // Устанавливаем текстуру атаки
+        sprite.setTexture(attackTexture); 
         sprite.setTextureRect(sf::IntRect(45, 64, 52, 66)); // Устанавливаем начальный кадр
     }
 
     if (attackElapsedTime >= attackAnimationSpeed) {
         attackFrame = (attackFrame + 1) % 4; 
             
-        int frameWidth = 65 + 63; // Ширина одного кадра атаки (может отличаться от ширины движения)
-        int frameHeight = 66; // Высота одного кадра
+        int frameWidth = 65 + 63; 
+        int frameHeight = 66; 
             
         sprite.setTexture(attackTexture);
-        // Устанавливаем новый прямоугольник текстуры для текущего кадра атаки
-         sprite.setTextureRect(sf::IntRect(45 + attackFrame * frameWidth, 64, 70, frameHeight)); 
+        sprite.setTextureRect(sf::IntRect(45 + attackFrame * frameWidth, 64, 70, frameHeight)); 
             
         attackElapsedTime = 0.f; 
     }
@@ -78,7 +77,6 @@ void Enemy::deathAnimation(float deltaTime){
         return;
     }
 
-    // Обновляем анимацию смерти на основе времени
     if (deathElapsedTime >= deathAnimationSpeed) {
         deathFrame = (deathFrame) % 4; 
 
@@ -90,7 +88,7 @@ void Enemy::deathAnimation(float deltaTime){
         sprite.setPosition(position.x, position.y + 9.f); 
         
         deathFrame += 1;
-        deathElapsedTime = 0.f; // Сбрасываем время
+        deathElapsedTime = 0.f; 
     }
 }
 
@@ -107,7 +105,6 @@ void Enemy::move(float deltaX, float deltaY, const Map& map) {
 
     size_t underY = static_cast<size_t>((position.y + 80.f) / tileSize);
 
-    // Проверка типа тайла
     int tileType1 = map.getTileType(newX, newY1);
     int tileType2 = map.getTileType(newX, underY);
     int tileType3 = map.getTileType(newX, newY2);
@@ -143,12 +140,12 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
     if (canSeePlayer(player, map)) {
         if (true){
         std::cout<<"противник видит игрока, останавливаемся и начинаем стрелять"<<std::endl;
-        //flag = false;
+        flag = false;
         }
         lastShotTime += deltaTime;
         if (lastShotTime >= shootCooldown) {
             shoot(player);
-            lastShotTime = 0.f; // Сброс таймера
+            lastShotTime = 0.f; 
         }
 
         attackAnimate(deltaTime);
@@ -163,29 +160,28 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
         sf::Vector2f playerPosition = player.getPosition();
         float distanceToPlayer = std::sqrt(std::pow(playerPosition.x - enemyPosition.x, 2) + 
                                                 std::pow(playerPosition.y - enemyPosition.y, 2));
-        if (distanceToPlayer < 64.f) { // Задайте радиус видимости
+        if (distanceToPlayer < 64.f) { 
                 // Поворачиваем врага в сторону игрока
             if (playerPosition.x < enemyPosition.x) {
-                movingRight = false; // Игрок слева от врага
+                movingRight = false; 
             } else {
-                movingRight = true; // Игрок справа от врага
+                movingRight = true;
             }
-            sprite.setScale(movingRight ? 1.f : -1.f, 1.f); // Поворот текстуры
+            sprite.setScale(movingRight ? 1.f : -1.f, 1.f); 
         }
         animate(deltaTime);
         // Если не видит игрока, продолжаем движение
         float direction = movingRight ? speed * deltaTime : -speed * deltaTime;
-        move(direction, 0.f, map); // Движение по оси X
+        move(direction, 0.f, map); 
 
-        sprite.setScale(movingRight ? 1.f : -1.f, 1.f); // Поворот текстуры
+        sprite.setScale(movingRight ? 1.f : -1.f, 1.f); 
     } 
     } else {
         deathAnimation(deltaTime);
     }
         for (size_t i = 0; i < bullets.size(); ) {
-        bullets[i].update(deltaTime); // Обновляем пулю
+        bullets[i].update(deltaTime); 
 
-        // Проверка на столкновение с тайлом
         size_t bulletX = static_cast<size_t>(bullets[i].getPosition().x / tileSize);
         size_t bulletY = static_cast<size_t>(bullets[i].getPosition().y / tileSize);
         
@@ -196,9 +192,9 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
         } else {
            if (checkCollisionWithPlayer(bullets[i], player)) {
                 player.die(); 
-                bullets.erase(bullets.begin() + i); // Удаляем пулю из вектора
+                bullets.erase(bullets.begin() + i); 
             } else {
-                ++i; // Переходим к следующей пуле только если не удалили текущую
+                ++i; 
             }
         }
     } 

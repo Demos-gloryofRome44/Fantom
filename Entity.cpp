@@ -31,8 +31,8 @@ Entity::Entity(const std::vector<std::string>& textureFiles, const std::vector<s
 
     sprite.setTextureRect(sf::IntRect(135, 30, 220, 290));
 
-    float scaleX = width / (sprite.getLocalBounds().width * 20); 
-    float scaleY = height / (sprite.getLocalBounds().height * 12);
+    scaleX = width / (sprite.getLocalBounds().width * 20); 
+    scaleY = height / (sprite.getLocalBounds().height * 12);
 
     sprite.setScale(scaleX, scaleY);
 
@@ -57,11 +57,7 @@ void Entity::move(float x, float y, Map &map) {
 }
 
 void Entity::updateSprite(bool turn) {
-    if (turn) {
-        sprite.setScale(-abs(sprite.getScale().x), sprite.getScale().y); // Переворачиваем по оси X
-    } else {
-        sprite.setScale(abs(sprite.getScale().x), sprite.getScale().y); // Возвращаем нормальный масштаб
-    }
+    sprite.setScale(!turn ? scaleX : -scaleX, scaleY); 
 }
 
 bool Entity::checkCollision(Map& map) {

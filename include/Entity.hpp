@@ -43,6 +43,9 @@ public:
 
 private:
     // Текстуры и спрайты
+    float scaleX;
+    float scaleY;
+    
     sf::Texture texture;
     sf::Texture dieTexture;
     sf::Sprite sprite;
@@ -58,6 +61,8 @@ private:
     float deathAnimationSpeed; // Скорость анимации смерти
     float elapsedTime;
     float deathElapsedTime; // Время для анимации смерти
+
+    bool isRight = true;
 
     sf::Font font; 
 };

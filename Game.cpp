@@ -173,7 +173,7 @@ void Game::draw() {
 void Game::processEvents() {
     window.setActive(true); 
 
-    if (!right) {
+    if (true) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
