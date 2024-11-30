@@ -159,13 +159,26 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
         sprite.setTextureRect(sf::IntRect(50, 60, 35, 70)); 
         attackFlag = false;
     } else {
+        sf::Vector2f enemyPosition = sprite.getPosition();
+        sf::Vector2f playerPosition = player.getPosition();
+        float distanceToPlayer = std::sqrt(std::pow(playerPosition.x - enemyPosition.x, 2) + 
+                                                std::pow(playerPosition.y - enemyPosition.y, 2));
+        if (distanceToPlayer < 64.f) { // Задайте радиус видимости
+                // Поворачиваем врага в сторону игрока
+            if (playerPosition.x < enemyPosition.x) {
+                movingRight = false; // Игрок слева от врага
+            } else {
+                movingRight = true; // Игрок справа от врага
+            }
+            sprite.setScale(movingRight ? 1.f : -1.f, 1.f); // Поворот текстуры
+        }
         animate(deltaTime);
         // Если не видит игрока, продолжаем движение
         float direction = movingRight ? speed * deltaTime : -speed * deltaTime;
         move(direction, 0.f, map); // Движение по оси X
 
         sprite.setScale(movingRight ? 1.f : -1.f, 1.f); // Поворот текстуры
-    }
+    } 
     } else {
         deathAnimation(deltaTime);
     }
