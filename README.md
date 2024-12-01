@@ -33,7 +33,7 @@ git clone https://github.com/Demos-gloryofRome44/Fantom.git
 cd fantom
 ```
 
-### 3. Соберите проект с помощью Maven
+### 3. Соберите проект с помощью Makefile
 
 Соберите проект с помощью Makefile:
 ```bash
