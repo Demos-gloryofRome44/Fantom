@@ -2,6 +2,7 @@
 #include "include/Map.hpp"
 #include "include/Entity.hpp"
 #include <iostream>
+#include <cmath>
 
 Enemy::Enemy(const std::string& textureFile, const std::string& attackTextureFile, const std::string& deathTextureFile,
         float posX, float posY, float speedEnemy, float rechargeTime, int yShootEnemy)
