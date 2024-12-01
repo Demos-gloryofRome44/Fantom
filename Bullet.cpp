@@ -1,4 +1,5 @@
 #include "include/Bullet.hpp"
+#include <cmath>
 
 Bullet::Bullet(float x, float y, const sf::Vector2f& playerPosition)
     : speed(200.f) { 
