@@ -173,7 +173,7 @@ void Game::draw() {
 void Game::processEvents() {
     window.setActive(true); 
 
-    if (true) {
+    if (!right) {
     std::cout << "Можно нажимать клавиши" << std::endl;
     right = true;
     }
@@ -211,34 +211,36 @@ void Game::update() {
     totalTime += deltaTime;    
     timeText.setString(std::to_string(static_cast<int>(totalTime)));
 
-    if (movingUp && player.currentEnergy > 0) {
-        player.move(0.f, -speed, maps[currentMapIndex]);
+    if (player.isAlive){
+        if (movingUp && player.currentEnergy > 0) {
+            player.move(0.f, -speed, maps[currentMapIndex]);
 
-        player.currentEnergy -= player.energyConsumptionRate * deltaTime; // Уменьшаем энергию при движении вверх
-        if (player.currentEnergy < 0) {
-            player.currentEnergy = 0; // Ограничиваем минимальное значение энергии
+            player.currentEnergy -= player.energyConsumptionRate * deltaTime; // Уменьшаем энергию при движении вверх
+            if (player.currentEnergy < 0) {
+                player.currentEnergy = 0; // Ограничиваем минимальное значение энергии
+            }
         }
-    }
-    if (movingUp && player.currentEnergy == 0) {
-        player.move(0.f, speed, maps[currentMapIndex]);
-    }
-    
-    if ((movingDown || !player.isOnGround(maps[currentMapIndex])) && !movingUp) {
-        player.move(0.f, speed, maps[currentMapIndex]);
-        if (player.currentEnergy + player.energyRecoveryRate * deltaTime <= player.maxEnergy) {
-            player.currentEnergy += player.energyRecoveryRate * deltaTime;
+        if (movingUp && player.currentEnergy == 0) {
+            player.move(0.f, speed, maps[currentMapIndex]);
         }
-    }
+        
+        if ((movingDown || !player.isOnGround(maps[currentMapIndex])) && !movingUp) {
+            player.move(0.f, speed, maps[currentMapIndex]);
+            if (player.currentEnergy + player.energyRecoveryRate * deltaTime <= player.maxEnergy) {
+                player.currentEnergy += player.energyRecoveryRate * deltaTime;
+            }
+        }
 
-    if (movingLeft) {
-        player.updateSprite(true);
-        player.move(-speed, 0.f, maps[currentMapIndex]);
-        turn = false;
-    }
-    if (movingRight) {
-        player.updateSprite(false);
-        player.move(speed, 0.f, maps[currentMapIndex]);
-        turn = true;
+        if (movingLeft) {
+            player.updateSprite(true);
+            player.move(-speed, 0.f, maps[currentMapIndex]);
+            turn = false;
+        }
+        if (movingRight) {
+            player.updateSprite(false);
+            player.move(speed, 0.f, maps[currentMapIndex]);
+            turn = true;
+        }
     }
 
     float energyPercentage = player.currentEnergy / player.maxEnergy; // Процент оставшейся энергии

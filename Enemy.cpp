@@ -36,11 +36,12 @@ void Enemy::animate(float deltaTime) {
     elapsedTime += deltaTime;
 
     if (elapsedTime >= animationSpeed) {
-        currentFrame = (currentFrame + 1) % 7; 
+        currentFrame = (currentFrame) % 5; 
         int frameWidth = 95 + 35; 
         int frameHeight = 70; 
         
         sprite.setTextureRect(sf::IntRect(30 + currentFrame * frameWidth, 60, 50, frameHeight));
+        currentFrame++;
         
         elapsedTime = 0.f; 
     }
@@ -138,45 +139,45 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
     }
     
     if (isAllive) {
-    if (canSeePlayer(player, map)) {
-        if (true){
-        std::cout<<"противник видит игрока, останавливаемся и начинаем стрелять"<<std::endl;
-        flag = false;
-        }
-        lastShotTime += deltaTime;
-        if (lastShotTime >= shootCooldown) {
-            shoot(player.getPosition());
-            lastShotTime = 0.f; 
-        }
-
-        attackAnimate(deltaTime);
-        attackFlag = true;
-        sprite.setScale(movingRight ? 1.f : -1.f, 1.f);
-    } else if (attackFlag){
-        sprite.setTexture(texture);
-        sprite.setTextureRect(sf::IntRect(50, 60, 35, 70)); 
-        attackFlag = false;
-    } else {
-        sf::Vector2f enemyPosition = sprite.getPosition();
-        sf::Vector2f playerPosition = player.getPosition();
-        float distanceToPlayer = std::sqrt(std::pow(playerPosition.x - enemyPosition.x, 2) + 
-                                                std::pow(playerPosition.y - enemyPosition.y, 2));
-        if (distanceToPlayer < 64.f) { 
-                // Поворачиваем врага в сторону игрока
-            if (playerPosition.x < enemyPosition.x) {
-                movingRight = false; 
-            } else {
-                movingRight = true;
+        if (canSeePlayer(player, map)) {
+            if (true){
+            std::cout<<"противник видит игрока, останавливаемся и начинаем стрелять"<<std::endl;
+            flag = false;
             }
-            sprite.setScale(movingRight ? 1.f : -1.f, 1.f); 
-        }
-        animate(deltaTime);
-        // Если не видит игрока, продолжаем движение
-        float direction = movingRight ? speed * deltaTime : -speed * deltaTime;
-        move(direction, 0.f, map); 
+            lastShotTime += deltaTime;
+            if (lastShotTime >= shootCooldown) {
+                shoot(player.getPosition());
+                lastShotTime = 0.f; 
+            }
 
-        sprite.setScale(movingRight ? 1.f : -1.f, 1.f); 
-    } 
+            attackAnimate(deltaTime);
+            attackFlag = true;
+            sprite.setScale(movingRight ? 1.f : -1.f, 1.f);
+        } else if (attackFlag){
+            sprite.setTexture(texture);
+            sprite.setTextureRect(sf::IntRect(50, 60, 35, 70)); 
+            attackFlag = false;
+        } else {
+            sf::Vector2f enemyPosition = sprite.getPosition();
+            sf::Vector2f playerPosition = player.getPosition();
+            float distanceToPlayer = std::sqrt(std::pow(playerPosition.x - enemyPosition.x, 2) + 
+                                                    std::pow(playerPosition.y - enemyPosition.y, 2));
+            if (distanceToPlayer < 64.f) { 
+                    // Поворачиваем врага в сторону игрока
+                if (playerPosition.x < enemyPosition.x) {
+                    movingRight = false; 
+                } else {
+                    movingRight = true;
+                }
+                sprite.setScale(movingRight ? 1.f : -1.f, 1.f); 
+            }
+            animate(deltaTime);
+            // Если не видит игрока, продолжаем движение
+            float direction = movingRight ? speed * deltaTime : -speed * deltaTime;
+            move(direction, 0.f, map); 
+
+            sprite.setScale(movingRight ? 1.f : -1.f, 1.f); 
+        } 
     } else {
         deathAnimation(deltaTime);
     }

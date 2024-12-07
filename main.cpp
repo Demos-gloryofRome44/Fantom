@@ -21,7 +21,7 @@ int main() {
     Menu menu; 
     menu.show(window);
 
-    std::unique_ptr<Game> game = std::make_unique<Game>(); // Используем уникальный указатель
+    std::unique_ptr<Game> game = std::make_unique<Game>(); 
 
     while (true) {
         game->run();
@@ -33,7 +33,6 @@ int main() {
         }
 
         window.clear();
-        // Отрисовка элементов здесь
         window.display();
     }
 
