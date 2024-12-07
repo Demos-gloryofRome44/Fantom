@@ -211,9 +211,24 @@ void Game::update() {
     totalTime += deltaTime;    
     timeText.setString(std::to_string(static_cast<int>(totalTime)));
 
+    float mapWidth = 520.f; 
+    float mapHeight = 320.f; 
+
+    float scaleX = window.getSize().x / mapWidth; 
+    float scaleY = window.getSize().y / mapHeight;
+
+    const float minScale = 0.8f; 
+    const float maxScale = 1.4f; 
+
+    // Ограничиваем значения масштаба
+    scaleX = std::clamp(scaleX, minScale, maxScale);
+    scaleY = std::clamp(scaleY, minScale, maxScale);
+
+    std::cout << "Коэфицент" << scaleX << " " << scaleY << std::endl;
+
     if (player.isAlive){
         if (movingUp && player.currentEnergy > 0) {
-            player.move(0.f, -speed, maps[currentMapIndex]);
+            player.move(0.f, -speed * scaleY, maps[currentMapIndex]);
 
             player.currentEnergy -= player.energyConsumptionRate * deltaTime; // Уменьшаем энергию при движении вверх
             if (player.currentEnergy < 0) {
@@ -221,24 +236,24 @@ void Game::update() {
             }
         }
         if (movingUp && player.currentEnergy == 0) {
-            player.move(0.f, speed, maps[currentMapIndex]);
+            player.move(0.f, speed * scaleY, maps[currentMapIndex]);
         }
         
         if ((movingDown || !player.isOnGround(maps[currentMapIndex])) && !movingUp) {
-            player.move(0.f, speed, maps[currentMapIndex]);
+            player.move(0.f, speed * scaleY, maps[currentMapIndex]);
             if (player.currentEnergy + player.energyRecoveryRate * deltaTime <= player.maxEnergy) {
                 player.currentEnergy += player.energyRecoveryRate * deltaTime;
             }
-        }
+        }//
 
         if (movingLeft) {
             player.updateSprite(true);
-            player.move(-speed, 0.f, maps[currentMapIndex]);
+            player.move(-speed * scaleX, 0.f, maps[currentMapIndex]);
             turn = false;
         }
         if (movingRight) {
             player.updateSprite(false);
-            player.move(speed, 0.f, maps[currentMapIndex]);
+            player.move(speed * scaleX, 0.f, maps[currentMapIndex]);
             turn = true;
         }
     }
