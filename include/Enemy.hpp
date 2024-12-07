@@ -56,7 +56,7 @@ private:
     bool deathFinish = false;
 
     void move(float deltaX, float deltaY, const Map& map); // Метод для движения с проверкой тайлов
-    void shoot(const Entity& player); // Метод для стрельбы
+    void shoot(const sf::Vector2f& playerPosition); // Метод для стрельбы
 
     sf::FloatRect getBounds() const {
     return sprite.getGlobalBounds(); 

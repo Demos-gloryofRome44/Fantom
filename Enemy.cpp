@@ -145,7 +145,7 @@ void Enemy::update(float deltaTime, const Map& map, Entity &player, const std::v
         }
         lastShotTime += deltaTime;
         if (lastShotTime >= shootCooldown) {
-            shoot(player);
+            shoot(player.getPosition());
             lastShotTime = 0.f; 
         }
 
@@ -213,14 +213,10 @@ void Enemy::draw(sf::RenderWindow& window) {
    }
 }
 
-void Enemy::shoot(const Entity& player) {
-    if (movingRight){
-        bullets.emplace_back(position.x + sprite.getGlobalBounds().width, position.y + yShoot,
-   player.getPosition()); 
-    } else {
-        bullets.emplace_back(position.x - sprite.getGlobalBounds().width, position.y + yShoot,
-   player.getPosition()); 
-    }
+void Enemy::shoot(const sf::Vector2f& playerPosition) {
+    float bulletStartX = movingRight ? position.x + sprite.getGlobalBounds().width 
+    : position.x - sprite.getGlobalBounds().width;
+    bullets.emplace_back(bulletStartX, position.y + yShoot, playerPosition);
 }
 
 bool Enemy::canSeePlayer(const Entity& player, const Map& map) {

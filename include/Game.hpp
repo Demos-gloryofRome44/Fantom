@@ -41,7 +41,7 @@ private:
 
     sf::Clock gameClock; 
 
-    const float speed = 0.05f; // Увеличиваем скорость
+    const float speed = 0.10f; // Увеличиваем скорость
 
     std::vector<Map> maps; // Вектор для хранения разных карт
     int currentMapIndex = 0; // Индекс текущей карты

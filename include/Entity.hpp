@@ -8,8 +8,8 @@
 class Map;
 class Entity {
 public:
-    Entity(const std::vector<std::string>& textureFiles, const std::vector<std::string>& dieTextures,
-           float posX, float posY, float width, float height);
+    Entity(const std::string& textureFiles, const std::string& turntextureFiles, 
+    const std::vector<std::string>& dieTextures, float posX, float posY, float width, float height);
 
     // Методы для работы с объектом
     sf::FloatRect getBounds() const { return sprite.getGlobalBounds(); }
@@ -47,6 +47,7 @@ private:
     float scaleY;
     
     sf::Texture texture;
+    sf::Texture turnTexture;
     sf::Texture dieTexture;
     sf::Sprite sprite;
     sf::CircleShape circle;

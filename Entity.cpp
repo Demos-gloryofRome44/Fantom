@@ -1,19 +1,19 @@
 #include "include/Entity.hpp"
 #include "include/Map.hpp"
 
-Entity::Entity(const std::vector<std::string>& textureFiles, const std::vector<std::string>& dieTexturesFile,
- float posX, float posY, float width, float height)
+Entity::Entity(const std::string& texturePlayer, const std::string& turnTexturePlayer,
+const std::vector<std::string>& dieTexturesFile, float posX, float posY, float width, float height)
     : currentFrame(0), animationSpeed(0.1f), elapsedTime(0.f), deathAnimationSpeed(0.3f), 
     currentDeathFrame(0), deathElapsedTime(0.f){
     
-    for (const auto& file : textureFiles) {
-        sf::Texture texture;
-        if (!texture.loadFromFile(file)) {
-            std::cerr << "Ошибка загрузки текстуры из " << file << std::endl;
-        } else {
-            textures.push_back(texture); // Добавляем текстуру в вектор
-        }
-    }
+    
+        if (!texture.loadFromFile(texturePlayer)) {
+            std::cerr << "Ошибка загрузки текстуры из " << texturePlayer << std::endl;
+        } 
+
+        if (!turnTexture.loadFromFile(turnTexturePlayer)) {
+            std::cerr << "Ошибка загрузки текстуры из " << turnTexturePlayer << std::endl;
+        } 
 
     for (const auto& file : dieTexturesFile) {
         sf::Texture dieTexture;
@@ -25,11 +25,11 @@ Entity::Entity(const std::vector<std::string>& textureFiles, const std::vector<s
     }
 
 
-    sprite.setTexture(textures[currentFrame]); // Устанавливаем первую текстуру
+    sprite.setTexture(texture); 
 
     sprite.setPosition(posX, posY); 
 
-    sprite.setTextureRect(sf::IntRect(135, 30, 220, 290));
+    sprite.setTextureRect(sf::IntRect(143, 30, 220, 290));
 
     scaleX = width / (sprite.getLocalBounds().width * 20); 
     scaleY = height / (sprite.getLocalBounds().height * 12);
@@ -50,14 +50,18 @@ void Entity::move(float x, float y, Map &map) {
     if (checkCollision(map)) {
         // Если произошло столкновение, возвращаемся к старому положению
         sprite.setPosition(currentPosition);
-    } else {
+    } /*else {
         // Обновляем анимацию только если нет столкновения
-        update(0.1f); 
-    }
+        update(0.2f); 
+    }*/
 }
 
 void Entity::updateSprite(bool turn) {
-    sprite.setScale(!turn ? scaleX : -scaleX, scaleY); 
+    if (turn) {
+        sprite.setTexture(turnTexture); // Устанавливаем текстуру для поворота
+    } else {
+        sprite.setTexture(texture); // Устанавливаем обычную текстуру
+    }
 }
 
 bool Entity::checkCollision(Map& map) {
@@ -135,7 +139,7 @@ void Entity::update(float deltaTime) {
             deathElapsedTime = 0.f; 
             currentDeathFrame += 1;    
         }
-    } else {
+    } /*else {
         elapsedTime += deltaTime;
 
         if (elapsedTime >= animationSpeed) {
@@ -143,7 +147,7 @@ void Entity::update(float deltaTime) {
             sprite.setTexture(textures[currentFrame]); // Устанавливаем новую текстуру
         }
         elapsedTime = 0.f; // Сбрасываем время
-    }
+    }*/
 }
 
 sf::Vector2f Entity::getPosition() const {

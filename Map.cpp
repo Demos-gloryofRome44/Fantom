@@ -21,7 +21,7 @@ Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::ve
         return;
     }
     if (currentMap == 8) {
-         enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_1/Shot_2.png", 
+         enemies.emplace_back("assets/enemy/Soldier_2/Walk.png", "assets/enemy/Soldier_2/Shot_1.png", 
         "assets/enemy/Soldier_1/Dead.png", 200.f, 123.f, 11.f, 0.5f, 10); 
         return;
     }

@@ -90,7 +90,7 @@ std::vector<std::vector<std::vector<int>>> loadMapsFromFile(const std::string& f
 
 
 Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
-               player(loadTexturesFromDirectory("assets/entity/Walking"), 
+               player("assets/entity/Walking/1.png",  "assets/entity/Walking/11.png",
                loadTexturesFromDirectory("assets/entity/Dying"),
                 32.f, 219.f, 
                window.getSize().x,
