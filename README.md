@@ -10,7 +10,10 @@ Fantom: Dark Entity — это курсовая работа, выполненн
 ### Цель Игры
 Основная цель игры — собрать все кристаллы хаоса в каждой из 9 комнат, преодолевая охрану.
 
-https://github.com/user-attachments/assets/a93881dd-cbdf-4782-8680-87dc89013c43
+
+
+https://github.com/user-attachments/assets/12eeb987-677d-4170-8859-340b53ce71f8
+
 
 
 ## Установка
@@ -30,7 +33,7 @@ git clone https://github.com/Demos-gloryofRome44/Fantom.git
 После клонирования перейдите в директорию проекта:
 
 ```bash
-cd fantom
+cd fantom/src
 ```
 
 ### 3. Соберите проект с помощью Makefile
