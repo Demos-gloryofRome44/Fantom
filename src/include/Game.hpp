@@ -6,6 +6,7 @@
 #include "Entity.hpp"
 #include "Map.hpp"
 #include "Explosion.hpp"
+#include "ResourceLoader.hpp"
 #include <memory>
 #include <thread>
 #include <mutex>
@@ -27,6 +28,8 @@ public:
 
 private:
     sf::RenderWindow window;
+
+    ResourceLoader loader;
 
     Entity player;
 

@@ -6,100 +6,19 @@
 #include <iostream>
 #include <fstream>
 #include "include/Menu.hpp"
-
-// Функция для загрузки текстур из директории
-std::vector<std::string> loadTexturesFromDirectory(const std::string& directory) {
-    std::vector<std::string> textureFiles;
-
-    // Проверка существования директории
-    if (!std::filesystem::exists(directory)) {
-        std::cerr << "Директория не найдена: " << directory << std::endl;
-        return textureFiles; // Возвращаем пустой вектор
-    }
-    // Проходим по всем файлам в директории
-    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
-        if (entry.is_regular_file()) { // Проверяем, что это файл
-            const std::string& path = entry.path().string();
-            // Проверяем расширение файла (например, .png или .jpg)
-            if (path.ends_with(".png") || path.ends_with(".jpg") || path.ends_with(".jpeg")) {
-                textureFiles.push_back(path); // Добавляем путь к файлу в вектор
-            }
-        }
-    }
-
-    return textureFiles; // Возвращаем список загруженных текстур
-}
-std::unordered_map<int, std::string> loadTextures(const std::string& filename) {
-    std::unordered_map<int, std::string> textureFiles;
-    std::ifstream file(filename);
-    std::string line;
-
-    while (std::getline(file, line)) {
-        std::istringstream iss(line);
-        int id;
-        std::string path;
-        char delimiter;
-
-        if (iss >> id >> delimiter >> path) {
-            textureFiles[id] = path;
-        }
-    }
-    return textureFiles;
-}
-
-std::vector<std::vector<std::vector<int>>> loadMapsFromFile(const std::string& filename) {
-    std::ifstream file(filename);
-    std::vector<std::vector<std::vector<int>>> allMaps;
-    std::vector<std::vector<int>> currentMap;
-    
-    if (!file.is_open()) {
-        std::cerr << "Could not open the file: " << filename << std::endl;
-        return allMaps; 
-    }
-
-    std::string line;
-    while (std::getline(file, line)) {
-        if (line.empty()) {
-            if (!currentMap.empty()) {
-                allMaps.push_back(currentMap);
-                currentMap.clear(); 
-            }
-            continue; 
-        }
-        if (line[0] == '#') {
-            continue; 
-        }
-
-        std::istringstream iss(line);
-        std::vector<int> row;
-        int value;
-
-        while (iss >> value) {
-            row.push_back(value);
-        }
-
-        currentMap.push_back(row);
-    }
-
-    if (!currentMap.empty()) {
-        allMaps.push_back(currentMap);
-    }
-
-    return allMaps;
-}
-
+#include "include/ResourceLoader.hpp"
 
 Game::Game() : window(sf::VideoMode(512, 320), "Dark Entity Escape"),
                player("assets/entity/Walking/1.png",  "assets/entity/Walking/11.png",
-               loadTexturesFromDirectory("assets/entity/Dying"),
+               loader.loadTexturesFromDirectory("assets/entity/Dying"),
                 32.f, 219.f, 
                window.getSize().x,
                window.getSize().y),
                movingUp(false), movingDown(false), movingLeft(false), movingRight(false) {
-    
-    auto textureFiles = loadTextures("resources/textures.txt");
 
-    auto mapsData = loadMapsFromFile("resources/levels.txt");
+    auto textureFiles = loader.loadTextures("resources/textures.txt");
+
+    auto mapsData = loader.loadMapsFromFile("resources/levels.txt");
 
     int curentMap = 0;
     for (const auto& level : mapsData) {
@@ -174,8 +93,8 @@ void Game::processEvents() {
     window.setActive(true); 
 
     if (!right) {
-    std::cout << "Можно нажимать клавиши" << std::endl;
-    right = true;
+        std::cout << "Можно нажимать клавиши" << std::endl;
+        right = true;
     }
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -223,8 +142,6 @@ void Game::update() {
     // Ограничиваем значения масштаба
     scaleX = std::clamp(scaleX, minScale, maxScale);
     scaleY = std::clamp(scaleY, minScale, maxScale);
-
-    std::cout << "Коэфицент" << scaleX << " " << scaleY << std::endl;
 
     if (player.isAlive){
         if (movingUp && player.currentEnergy > 0) {
