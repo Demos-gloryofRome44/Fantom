@@ -47,7 +47,7 @@ private:
     
     bool attackFlag = false;
 
-    sf::Vector2f position; // Позиция врага
+    sf::Vector2f position; 
     const float tileSize = 32.f; // Размер тайла для проверки коллизий
 
     void animate(float deltaTime); 
@@ -56,7 +56,7 @@ private:
     bool deathFinish = false;
 
     void move(float deltaX, float deltaY, const Map& map); // Метод для движения с проверкой тайлов
-    void shoot(const sf::Vector2f& playerPosition); // Метод для стрельбы
+    void shoot(const sf::Vector2f& playerPosition); 
 
     sf::FloatRect getBounds() const {
     return sprite.getGlobalBounds(); 

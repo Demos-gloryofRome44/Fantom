@@ -52,7 +52,7 @@ void Game::run() {
         if (isGameOver == true) {
             Menu menu;
             int result = menu.restartMenu(window);
-            if (result == 2) { // Если выбрана опция выхода
+            if (result == 2) { 
                 isGameOver = true;
                 return;
             }
@@ -92,7 +92,7 @@ void Game::draw() {
 void Game::processEvents() {
     window.setActive(true); 
 
-    if (!right) {
+    if (true) {
         std::cout << "Можно нажимать клавиши" << std::endl;
         right = true;
     }

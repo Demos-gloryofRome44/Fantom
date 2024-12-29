@@ -52,16 +52,16 @@ private:
     sf::Sprite sprite;
     sf::CircleShape circle;
     
-    std::vector<sf::Texture> textures; // Вектор для хранения текстур
-    std::vector<sf::Texture> dieTextures;
+    std::vector<sf::Texture> textures; // Вектор для хранения обычных текстур
+    std::vector<sf::Texture> dieTextures; // Вектор для хранения текстур анимации смерти 
 
     // Анимация
     int currentFrame; 
     int currentDeathFrame; 
     float animationSpeed; 
-    float deathAnimationSpeed; // Скорость анимации смерти
+    float deathAnimationSpeed; 
     float elapsedTime;
-    float deathElapsedTime; // Время для анимации смерти
+    float deathElapsedTime;
 
     bool isRight = true;
 

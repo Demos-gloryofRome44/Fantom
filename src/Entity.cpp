@@ -20,7 +20,7 @@ const std::vector<std::string>& dieTexturesFile, float posX, float posY, float w
         if (!dieTexture.loadFromFile(file)) {
             std::cerr << "Ошибка загрузки текстуры из " << file << std::endl;
         } else {
-            dieTextures.push_back(dieTexture); // Добавляем текстуру в вектор
+            dieTextures.push_back(dieTexture); 
         }
     }
 
@@ -61,6 +61,13 @@ void Entity::updateSprite(bool turn) {
     }
 }
 
+/* текстуры весом < 40 это стены
+*  текстуры >40 это фоновые обьекты 
+*  -1 - фон
+*  11 и 29 - двери
+*  50 - терминал открытия
+*  100 - кристал
+*/
 bool Entity::checkCollision(Map& map) {
     // Получаем границы игрока
     sf::FloatRect playerBounds = getBounds();
@@ -94,16 +101,16 @@ bool Entity::checkCollision(Map& map) {
             if ((tileType == 11 || tileType == 29) && doorActivation) {
                 sf::FloatRect back = map.getTileBounds(x, y - 1);
                 if (playerBounds.intersects(tileBounds)) {
-                    return false; // Столкновение обнаружено
+                    return false; 
                 }
                 if (playerBounds.intersects(back)) {
-                    return false; // Столкновение обнаружено
+                    return false; 
                 }
             }
             
-            if (tileType != -1 && tileType < 40) { // Проверяем типы блоков                
+            if (tileType != -1 && tileType < 40) {              
                 if (playerBounds.intersects(tileBounds)) {
-                    return true; // Столкновение обнаружено
+                    return true; 
                 }
             }
         }
@@ -160,7 +167,7 @@ bool Entity::isOnGround(Map &map) {
 }
 
 void Entity::showEnergyIncreaseMessage() {
-    if (!font.loadFromFile("assets/DsStamper.ttf")) { // Загрузите шрифт
+    if (!font.loadFromFile("assets/DsStamper.ttf")) { 
         std::cerr << "Ошибка загрузки шрифта!" << std::endl;
     }
     std::cout << "Максимальная энергия увеличена: " << maxEnergy;
