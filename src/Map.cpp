@@ -22,6 +22,7 @@ Map::Map(const std::unordered_map<int, std::string>& textureFiles, const std::ve
     // Установка карты
     map = mapData;
 
+    // Спецификация добавления врагов для каждой карты 
     if (currentMap == 6) {
         return;
     }

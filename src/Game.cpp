@@ -106,9 +106,8 @@ void Game::processEvents() {
             if (event.key.code == sf::Keyboard::S) movingDown = true;
             if (event.key.code == sf::Keyboard::A) movingLeft = true;
             if (event.key.code == sf::Keyboard::D) movingRight = true;
-            if (event.key.code == sf::Keyboard::Space && lastExplosionTime >= explosionCooldown)  { // Проверка на пробел
+            if (event.key.code == sf::Keyboard::Space && lastExplosionTime >= explosionCooldown)  {
                     triggerExplosion(player.getPosition()); // Вызываем взрыв на позиции игрока
-                    std::cout << "tab pressed" << std::endl;
                     lastExplosionTime = 0.0f;
             }
         }
@@ -136,6 +135,7 @@ void Game::update() {
     float scaleX = window.getSize().x / mapWidth; 
     float scaleY = window.getSize().y / mapHeight;
 
+    // Подержание соотвествущей скорости, при расширени окна
     const float minScale = 0.8f; 
     const float maxScale = 1.4f; 
 
@@ -149,7 +149,7 @@ void Game::update() {
 
             player.currentEnergy -= player.energyConsumptionRate * deltaTime; // Уменьшаем энергию при движении вверх
             if (player.currentEnergy < 0) {
-                player.currentEnergy = 0; // Ограничиваем минимальное значение энергии
+                player.currentEnergy = 0; 
             }
         }
         if (movingUp && player.currentEnergy == 0) {
@@ -161,7 +161,7 @@ void Game::update() {
             if (player.currentEnergy + player.energyRecoveryRate * deltaTime <= player.maxEnergy) {
                 player.currentEnergy += player.energyRecoveryRate * deltaTime;
             }
-        }//
+        }
 
         if (movingLeft) {
             player.updateSprite(true);
@@ -181,13 +181,13 @@ void Game::update() {
     player.update(deltaTime);
  
     if (player.end) {
-        isGameOver = true; // Завершаем игру
+        isGameOver = true; 
     }
 
     for (auto it = explosions.begin(); it != explosions.end(); ) {
         it->update(deltaTime); // Обновляем анимацию взрыва
 
-        if (it->isFinished()) { // Проверяем завершение анимации
+        if (it->isFinished()) { /
             it = explosions.erase(it); // Удаляем завершенные взрывы
         } else {
             ++it; // Переходим к следующему взрыву
@@ -197,12 +197,12 @@ void Game::update() {
     maps[currentMapIndex].updateEnemies(deltaTime, player, explosions);
     maps[currentMapIndex].update(deltaTime);
 
-    if (player.showMessage) {
-        player.messageDisplayTime += deltaTime; // Увеличиваем время отображения
+    if (player.showMessage) { // Сообщение о успешном сброе кристала 
+        player.messageDisplayTime += deltaTime; 
 
-        if (player.messageDisplayTime >= 2.f) { // Если прошло больше 3 секунд
-            player.showMessage = false; // Скрываем сообщение
-            player.messageDisplayTime = 0.f; // Сбрасываем таймер
+        if (player.messageDisplayTime >= 2.f) { // Если прошло больше ~2 секунд
+            player.showMessage = false; 
+            player.messageDisplayTime = 0.f; 
         }
     }
 
@@ -221,15 +221,16 @@ void Game::update() {
         player.doorActivation = false;
     } 
 
+    // метод для двери в которую можно войти несколько раз туда и обратно
     if (maps[currentMapIndex].isExitTileEnd(player.getPosition())) { 
         totalCrystel += maps[currentMapIndex].visitedCrystals.size();
 
         if (currentMapIndex == 6) {
             currentMapIndex = currentMapIndex + 1;
-            player.setPosition(50.f, 150.f); // Сброс позиции игрока в новой карте
+            player.setPosition(50.f, 150.f); 
         } else {
             currentMapIndex = currentMapIndex - 1;
-            player.setPosition(450.f, 70.f); // Сброс позиции игрока в новой карте
+            player.setPosition(450.f, 70.f); 
         }
 
         player.doorActivation = false;

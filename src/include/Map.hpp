@@ -1,6 +1,7 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
+#include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
