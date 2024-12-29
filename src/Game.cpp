@@ -187,7 +187,7 @@ void Game::update() {
     for (auto it = explosions.begin(); it != explosions.end(); ) {
         it->update(deltaTime); // Обновляем анимацию взрыва
 
-        if (it->isFinished()) { /
+        if (it->isFinished()) { 
             it = explosions.erase(it); // Удаляем завершенные взрывы
         } else {
             ++it; // Переходим к следующему взрыву
