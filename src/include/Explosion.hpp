@@ -5,7 +5,7 @@
 class Explosion {
 public:
     Explosion(float x, float y) : scale(0.0f), growing(true), elapsedTime(0.f), animationSpeed(0.1f) {
-        if (!texture.loadFromFile("assets/boom.png")) { // Путь к текстуре взрыва
+        if (!texture.loadFromFile("assets/boom.png")) { 
             std::cerr << "Ошибка загрузки текстуры взрыва." << std::endl;
         }
         sprite.setTexture(texture);
@@ -18,18 +18,18 @@ public:
 
         // Увеличиваем или уменьшаем масштаб
         if (growing) {
-            scale += deltaTime; // Увеличиваем масштаб
-            if (scale >= 0.3f) { // Максимальный масштаб
-                growing = false; // Начинаем уменьшение
+            scale += deltaTime; 
+            if (scale >= 0.3f) { 
+                growing = false; 
             }
         } else {
-            scale -= deltaTime; // Уменьшаем масштаб
+            scale -= deltaTime; 
             if (scale <= 0.0f) {
                 scale = 0.0f; // Завершение анимации
             }
         }
 
-        sprite.setScale(scale, scale); // Применяем масштаб к спрайту
+        sprite.setScale(scale, scale); 
     }
 
     void draw(sf::RenderWindow& window) {
@@ -39,11 +39,11 @@ public:
     }
 
     bool isFinished() const {
-        return scale <= 0.0f; // Проверяем завершение анимации
+        return scale <= 0.0f;
     }
 
     sf::FloatRect getBounds() const {
-        return sprite.getGlobalBounds(); // Предполагается, что у вас есть спрайт в классе Explosion
+        return sprite.getGlobalBounds(); 
     }
 
 private:

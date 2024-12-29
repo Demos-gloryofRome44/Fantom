@@ -13,12 +13,12 @@ class ResourceLoader {
 public:
     // Загружает текстуры из указанной директории
     std::vector<std::string> loadTexturesFromDirectory(const std::string& directory) {
-        std::vector<std::string> textureFiles;
+        std::vector<std::string> textureFiles; // список текстур
 
         // Проверка существования директории
         if (!std::filesystem::exists(directory)) {
             std::cerr << "Директория не найдена: " << directory << std::endl;
-            return textureFiles; // Возвращаем пустой вектор
+            return textureFiles; 
         }
 
         // Проходим по всем файлам в директории
@@ -31,10 +31,10 @@ public:
             }
         }
 
-        return textureFiles; // Возвращаем список загруженных текстур
+        return textureFiles; 
     }
 
-    // Загружает текстуры из файла, где каждая строка имеет формат: id путь_к_текстуре
+    // Загружает текстуры из файла, где каждая строка имеет формат: id:путь_к_текстуре
     std::unordered_map<int, std::string> loadTextures(const std::string& filename) {
         std::unordered_map<int, std::string> textureFiles;
         std::ifstream file(filename);
@@ -82,7 +82,7 @@ public:
             std::vector<int> row;
             int value;
 
-            while (iss >> value) { // Читаем значения карты
+            while (iss >> value) { // Читаем значения тайлов карты
                 row.push_back(value);
             }
 

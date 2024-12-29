@@ -12,7 +12,7 @@ class Enemy;
 class Explosion;
 class Map {
 public:
-    // Конструктор, который загружает текстуры и устанавливает карту
+    // Конструктор, который загружает текстуры и устанавливает соответствующую карту
     Map(const std::unordered_map<int, std::string>& textureFiles, const std::vector<std::vector<int>>& mapData, 
     int currentMap);
 

@@ -33,7 +33,8 @@ private:
 
     Entity player;
 
-    bool movingUp;// движение игрока в зависимости прожатой кнопки
+    // флаги для движения игрока в зависимости прожатой кнопки
+    bool movingUp;
     bool movingDown;
     bool movingLeft;
     bool movingRight;
@@ -46,11 +47,11 @@ private:
 
     const float speed = 0.08f; // Увеличиваем скорость
 
-    std::vector<Map> maps; // Вектор для хранения разных карт
-    int currentMapIndex = 0; // Индекс текущей карты
+    std::vector<Map> maps; // Вектор для хранения разных карт игры
+    int currentMapIndex = 0; 
 
     std::vector<Explosion> explosions;
-    float explosionCooldown = 1.0f; // Время между взрывами (в секундах)
+    float explosionCooldown = 1.0f; // Время между взрывами 
     float lastExplosionTime = 0.0f; // Время последнего взрыва
     float totalTime = 0.0f;
     int totalCrystel = 0;
@@ -58,13 +59,10 @@ private:
     // Полоска энергии
     sf::RectangleShape energyBarBackground; 
     sf::RectangleShape energyBar; 
-    sf::Font font; // Шрифт для кнопок
+
+    sf::Font font;
     sf::Text timeText; // Кнопка "Новая игра"
 
-    std::mutex mtx; // Мьютекс для синхронизации
-
     int previousMapIndex;
-
-
 };
 #endif // GAME_H

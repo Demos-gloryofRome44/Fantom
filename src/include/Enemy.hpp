@@ -40,8 +40,8 @@ private:
     float attackElapsedTime; 
     float deathElapsedTime;
 
-    std::vector<Bullet> bullets; // Вектор для хранения пуль
-    float speed; // Скорость движения противника
+    std::vector<Bullet> bullets; 
+    float speed; 
     float shootCooldown; // Время между выстрелами
     float lastShotTime; // Время с последнего выстрела
     
@@ -55,7 +55,7 @@ private:
     void deathAnimation(float deltaTime);
     bool deathFinish = false;
 
-    void move(float deltaX, float deltaY, const Map& map); // Метод для движения с проверкой тайлов
+    void move(float deltaX, float deltaY, const Map& map); // Метод для движения с проверкой тайлов с учетом стен
     void shoot(const sf::Vector2f& playerPosition); 
 
     sf::FloatRect getBounds() const {
