@@ -70,9 +70,9 @@ void Map::draw(sf::RenderWindow& window) {
 
             if (tileType == 11 || tileType == 29) { 
                 sf::Sprite doorSprite;
-                doorSprite.setTexture(textures[tileType]); // Получаем текстуру двери
+                doorSprite.setTexture(textures[tileType]); 
                 doorSprite.setTextureRect(sf::IntRect(32 * currentDoorFrame, 0, 32, 64)); // Устанавливаем текущий кадр анимации
-                doorSprite.setPosition(x * tileSize, y * tileSize); // Устанавливаем позицию двери
+                doorSprite.setPosition(x * tileSize, y * tileSize); 
                 window.draw(doorSprite); // Рисуем дверь с анимацией
             }
 
@@ -80,8 +80,8 @@ void Map::draw(sf::RenderWindow& window) {
                 sf::Vector2f crystalPosition(x * tileSize, y * tileSize);
                 if (std::find(visitedCrystals.begin(), visitedCrystals.end(), crystalPosition) == visitedCrystals.end()) { 
                     sf::Sprite crystal;
-                    crystal.setTexture(textures[tileType]); // Убедитесь, что texture инициализирована
-                    crystal.setPosition(crystalPosition); // Используем правильную позицию
+                    crystal.setTexture(textures[tileType]); 
+                    crystal.setPosition(crystalPosition); 
                     window.draw(crystal);
                 }
             }
@@ -101,7 +101,7 @@ bool Map::isExitTile(const sf::Vector2f& position) const {
                 sf::FloatRect back = getTileBounds(x, y - 1);
 
                 if (tileBounds.contains(position) || back.contains(position)) {
-                    return true; // Игрок находится на тайле выхода
+                    return true; 
                 }
             }
         }
@@ -118,7 +118,7 @@ bool Map::isExitTileEnd(const sf::Vector2f& position) const {
                 sf::FloatRect back = getTileBounds(x, y - 1);
 
                 if (tileBounds.contains(position) || back.contains(position)) {
-                    return true; // Игрок находится на тайле выхода
+                    return true; 
                 }
             }
         }
@@ -139,18 +139,18 @@ void Map::updateEnemies(float deltaTime, Entity &player, const std::vector<Explo
 
 void Map::update(float deltaTime) {
     sf::Sprite sprite;
-    // Проверка состояния двери
+    // Проверка состояния двери, на то был ли активирован терминал
     if (doorActivation) {
     for (size_t y = 0; y < map.size(); ++y) {
         for (size_t x = 0; x < map[y].size(); ++x) {
             int tileType = map[y][x];
             if (tileType == 11 || tileType == 29) { // Проверяем, является ли тайл дверью
-                doorAnimationTime += deltaTime; // Увеличиваем время анимации
+                doorAnimationTime += deltaTime; 
                 if (doorAnimationTime >= doorFrameDuration) {
                     currentDoorFrame++; // Переход к следующему кадру анимации
-                    doorAnimationTime = 0.f; // Сброс времени анимации
+                    doorAnimationTime = 0.f; 
                 }
-                if (currentDoorFrame >= 5) { // Если достигли конца анимации
+                if (currentDoorFrame >= 5) { // Если конец анимации
                     currentDoorFrame = 4; // Устанавливаем последний кадр
                 }
             } 
